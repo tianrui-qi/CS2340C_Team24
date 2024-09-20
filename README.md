@@ -3,4 +3,4 @@
 ## Member
 
 - Zishuo Wang, zwang3419@gatech.edu
-- Firstname Lastname,
+- Tianrui Qi, tianrui.qi@gatech.edu
