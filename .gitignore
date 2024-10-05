@@ -1,2 +1,83 @@
 *.gz
 .DS_Store
+
+
+# Ignore all .idea related files across the project, no matter the folder depth
+**/.idea/workspace.xml
+**/.idea/libraries/
+**/.idea/modules.xml
+**/.idea/.name
+**/.idea/assetWizardSettings.xml
+**/.idea/caches/
+**/.idea/codeStyles/
+**/.idea/gradle.xml
+**/.idea/modules.xml
+**/.idea/target
+**/.idea/inspectionProfiles/
+**/.idea/misc.xml
+**/.idea/sqlDataSources.xml
+**/.idea/dataSources/
+**/.idea/databases/
+**/.idea/tables/
+**/.idea/schemas/
+**/.idea/vcs.xml
+**/.idea/dictionaries/
+**/.idea/*.iml
+**/.idea/artifacts/
+**/.idea/shelf/
+
+# Android Studio specific
+**/.idea/
+**/.gradle/
+**/build/
+**/captures/
+**/.externalNativeBuild/
+
+# Gradle files
+**/local.properties
+**/.gradle/
+**/*.iml
+
+# Keystore files (for signing the APK)
+**/*.jks
+**/*.keystore
+
+# Log files
+**/*.log
+
+# Android specific folders
+**/app/build/
+**/build/
+**/*.apk
+**/*.ap_
+**/*.dex
+**/*.class
+**/*.so
+**/*.jar
+**/*.war
+**/*.ear
+**/*.db
+**/*.sqlite
+**/*.swo
+**/*.swp
+**/*.lock
+**/*.orig
+**/*.pyc
+**/*.pyo
+**/*.idb
+
+# Miscellaneous
+**/.DS_Store
+**/Thumbs.db
+
+# Ignore local configuration file
+**/local.properties
+
+# Android Studio Navigation Editor temp files
+**/.navigation/
+
+# Android Studio 3.6+ auto-generated files
+**/.idea/caches/build_file_checksums.ser
+
+# Mac specific
+**/.DS_Store
