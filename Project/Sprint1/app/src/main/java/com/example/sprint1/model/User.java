@@ -1,33 +1,20 @@
 package com.example.sprint1.model;
-import java.util.HashMap;
+
 
 public class User {
-    String username;
-    String password;
-    HashMap<String,String> map = new HashMap<>();
+    private final String username;
+    private final String password;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public boolean checkUser(String username, String password) {
-        if(!map.containsKey(username)) {
-            return false;
-        }
-        if (map.get(username) != password) {
-            return false;
-        }
-        return true;
+    public String getUsername() {
+        return this.username;
     }
 
-    public boolean createUsers(String username, String password) {
-        if(username == null || password  == null || username.trim().isEmpty() || password.trim().isEmpty()) return false;
-        if (!map.containsKey(username)){
-            User newUser = new User(username, password);
-            map.put(newUser.username, newUser.password);
-            return true;
-        }
-        return false;
+    public String getPassword() {
+        return this.password;
     }
 }

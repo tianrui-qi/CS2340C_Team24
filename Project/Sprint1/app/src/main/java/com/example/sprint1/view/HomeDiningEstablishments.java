@@ -1,14 +1,11 @@
 package com.example.sprint1.view;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.sprint1.R;
+
 
 public class HomeDiningEstablishments extends AppCompatActivity {
 
@@ -23,44 +20,32 @@ public class HomeDiningEstablishments extends AppCompatActivity {
         ImageButton accButton = findViewById(R.id.view_din_button_acc);
         ImageButton traButton = findViewById(R.id.view_din_button_tra);
 
-        logButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(
-                        HomeDiningEstablishments.this, HomeLogistics.class
-                );
-                startActivity(intent);
-            }
+        logButton.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    HomeDiningEstablishments.this, HomeLogistics.class
+            );
+            startActivity(intent);
         });
 
-        desButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(
-                        HomeDiningEstablishments.this, HomeDestination.class
-                );
-                startActivity(intent);
-            }
+        desButton.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    HomeDiningEstablishments.this, HomeDestination.class
+            );
+            startActivity(intent);
         });
 
-        accButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(
-                        HomeDiningEstablishments.this, HomeAccommodations.class
-                );
-                startActivity(intent);
-            }
+        accButton.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    HomeDiningEstablishments.this, HomeAccommodations.class
+            );
+            startActivity(intent);
         });
 
-        traButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(
-                        HomeDiningEstablishments.this, HomeTravelCommunity.class
-                );
-                startActivity(intent);
-            }
+        traButton.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    HomeDiningEstablishments.this, HomeTravelCommunity.class
+            );
+            startActivity(intent);
         });
     }
 }
