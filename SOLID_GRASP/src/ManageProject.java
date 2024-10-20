@@ -1,4 +1,4 @@
-package solid_grasp;
+package src;
 
 interface ManageProject {
     void joinProject(Project project);

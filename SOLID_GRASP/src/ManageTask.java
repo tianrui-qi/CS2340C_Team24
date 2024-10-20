@@ -1,4 +1,4 @@
-package solid_grasp;
+package src;
 
 interface ManageTask {
     void addTask(Task task);
