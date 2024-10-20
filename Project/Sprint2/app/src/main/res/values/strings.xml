@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Sprint1</string>
+    <string name="action_settings">Settings</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <!--  activity_home_destination  -->
+    <string name="HomeDestination_Title">Destination</string>
+    <string name="HomeDestination_LogTravel">Log Travel</string>
+    <string name="HomeDestination_LogTravel_TravelLocation">Travel Location</string>
+    <string name="HomeDestination_LogTravel_StartDate">Start Date (MM/DD/YYYY)</string>
+    <string name="HomeDestination_LogTravel_EndDate">End Date (MM/DD/YYYY)</string>
+    <string name="HomeDestination_LogTravel_Cancel">Cancel</string>
+    <string name="HomeDestination_LogTravel_Submit">Submit</string>
+    <string name="HomeDestination_Calculate">Calculate Vacation Time</string>
+    <string name="HomeDestination_Calculate_StartDate">Start Date (MM/DD/YYYY)</string>
+    <string name="HomeDestination_Calculate_EndDate">End Date (MM/DD/YYYY)</string>
+    <string name="HomeDestination_Calculate_Duration">Duration DD</string>
+    <string name="HomeDestination_Calculate_Button">Calculate</string>
+    <!--  activity_home_logistics_screen  -->
+    <string name="logistics_screen">Logistics Screen</string>
+    <!--  activity_home_dining_screen  -->
+    <string name="dining_screen">Dining Establishments Screen</string>
+    <!--  activity_home_accommodations_screen  -->
+    <string name="accommodations_screen">Accommodations Screen</string>
+    <!--  activity_home_travel_screen  -->
+    <string name="travel_screen">Travel Community Screen</string>
+
+
+
+    <string name="welcome_to">Welcome to</string>
+    <string name="wander_sync">WanderSync!</string>
+    <string name="login">Login</string>
+    <string name="create_login">Login</string>
+    <string name="create_acc">Create an Account</string>
+    <string name="register">Register</string>
+    <string name="username">Username:</string>
+    <string name="password">Password:</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="start">Start</string>
+    <string name="quit">Quit</string>
+</resources>
