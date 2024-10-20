@@ -6,40 +6,38 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <!--  activity_home_destination  -->
-    <string name="HomeDestination_Title">Destination</string>
-    <string name="HomeDestination_LogTravel">Log Travel</string>
-    <string name="HomeDestination_LogTravel_TravelLocation">Travel Location</string>
-    <string name="HomeDestination_LogTravel_StartDate">Start Date (MM/DD/YYYY)</string>
-    <string name="HomeDestination_LogTravel_EndDate">End Date (MM/DD/YYYY)</string>
-    <string name="HomeDestination_LogTravel_Cancel">Cancel</string>
-    <string name="HomeDestination_LogTravel_Submit">Submit</string>
-    <string name="HomeDestination_Calculate">Calculate Vacation Time</string>
-    <string name="HomeDestination_Calculate_StartDate">Start Date (MM/DD/YYYY)</string>
-    <string name="HomeDestination_Calculate_EndDate">End Date (MM/DD/YYYY)</string>
-    <string name="HomeDestination_Calculate_Duration">Duration DD</string>
-    <string name="HomeDestination_Calculate_Button">Calculate</string>
-    <!--  activity_home_logistics_screen  -->
-    <string name="logistics_screen">Logistics Screen</string>
-    <!--  activity_home_dining_screen  -->
-    <string name="dining_screen">Dining Establishments Screen</string>
-    <!--  activity_home_accommodations_screen  -->
-    <string name="accommodations_screen">Accommodations Screen</string>
-    <!--  activity_home_travel_screen  -->
-    <string name="travel_screen">Travel Community Screen</string>
+    <!--  welcome  -->
+    <string name="Welcome_Title">Welcome to</string>
+    <string name="Welcome_Name">WanderSync!</string>
+    <!--  home_des  -->
+    <string name="Home_Des_Title">Destination</string>
+    <string name="Home_Des_LogTravel">Log Travel</string>
+    <string name="Home_Des_LogTravel_TravelLocation">Travel Location</string>
+    <string name="Home_Des_LogTravel_StartDate">Estimated Start (MM/DD/YYYY)</string>
+    <string name="Home_Des_LogTravel_EndDate">Estimated End (MM/DD/YYYY)</string>
+    <string name="Home_Des_LogTravel_Cancel">Cancel</string>
+    <string name="Home_Des_LogTravel_Submit">Submit</string>
+    <string name="Home_Des_Calculate">Calculate Vacation Time</string>
+    <string name="Home_Des_Calculate_StartDate">Start Date (MM/DD/YYYY)</string>
+    <string name="Home_Des_Calculate_EndDate">End Date (MM/DD/YYYY)</string>
+    <string name="Home_Des_Calculate_Duration">Duration</string>
+    <string name="Home_Des_Calculate_Button">Calculate</string>
+    <!--  home_log  -->
+    <string name="Home_Log_Title">Logistics</string>
+    <!--  home_din  -->
+    <string name="Home_Din_Title">Dining Establishments</string>
+    <!--  home_acc  -->
+    <string name="Home_Acc_Title">Accommodations</string>
+    <!--  home_tra  -->
+    <string name="Home_Tra_Title">Travel Community</string>
 
 
-
-    <string name="welcome_to">Welcome to</string>
-    <string name="wander_sync">WanderSync!</string>
-    <string name="login">Login</string>
-    <string name="create_login">Login</string>
+    <string name="User_SignIn_Title">Log In</string>
+    <string name="create_login">Log In</string>
     <string name="create_acc">Create an Account</string>
     <string name="register">Register</string>
-    <string name="username">Username:</string>
-    <string name="password">Password:</string>
-    <string name="hint_username">Username</string>
-    <string name="hint_password">Password</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
     <string name="start">Start</string>
     <string name="quit">Quit</string>
 </resources>

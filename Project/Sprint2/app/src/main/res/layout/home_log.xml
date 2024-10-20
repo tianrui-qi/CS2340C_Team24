@@ -3,24 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.HomeLogistics">
+    tools:context=".view.HomeLog">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:gravity="center"
-        android:text="@string/logistics_screen"
+        android:text="@string/Home_Log_Title"
         android:textColor="@color/black"
         android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".view.MainActivity" />
+        tools:context=".view.Welcome" />
 
     <LinearLayout
-        android:id="@+id/HomeDestination_NavigationBar"
+        android:id="@+id/NavigationBar"
         android:layout_width="411dp"
         android:layout_height="85dp"
         android:orientation="horizontal"
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/accomodations" />
+            android:src="@drawable/accomodations_fill" />
 
         <ImageButton
             android:id="@+id/view_log_button_tra"
