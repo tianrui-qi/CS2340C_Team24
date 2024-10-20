@@ -1,0 +1,3 @@
+interface BaseTask {
+    void execute();
+}
