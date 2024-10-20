@@ -1,4 +1,4 @@
-package solid_grasp;
+package src;
 
 public class SpecialTeamMember extends TeamMember implements ManageProject {
     private String specialResponsibility;
