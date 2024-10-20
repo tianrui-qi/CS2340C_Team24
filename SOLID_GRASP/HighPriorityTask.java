@@ -3,7 +3,7 @@ import java.util.Date;
 
 public class HighPriorityTask extends Task{
     private Boolean ifHighP;
-    public HighPriorityTask(String title, String description, Date dueDate, int recurrenceInterval, String status, int priority) {
+    public HighPriorityTask(String title, String description, Date dueDate, int recurrenceInterval, String status, int priority, Boolean ifHighP) {
         super(title, description, dueDate, status, priority);
         this.ifHighP = ifHighP;
     }
