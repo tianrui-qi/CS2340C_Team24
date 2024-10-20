@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
+    tools:context=".view.Welcome">
 
     <TextView
         android:id="@+id/text_welcome_to"
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="250dp"
         android:gravity="center"
-        android:text="@string/welcome_to"
+        android:text="@string/Welcome_Title"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:gravity="center"
-        android:text="@string/wander_sync"
+        android:text="@string/Welcome_Name"
         android:textColor="@color/black"
         android:textSize="40sp"
         android:textStyle="bold"

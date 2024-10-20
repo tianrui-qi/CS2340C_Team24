@@ -1,0 +1,245 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".view.Welcome">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/NavigationBar"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="50dp"
+                android:gravity="center"
+                android:text="@string/Home_Des_Title"
+                android:textColor="@color/black"
+                android:textSize="50sp"
+
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Log Travel Bottom -->
+            <Button
+                android:id="@+id/HomeDestination_LogTravel"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+
+                android:text="@string/Home_Des_LogTravel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Title" />
+
+            <!-- Log Travel Form (gone) -->
+            <LinearLayout
+                android:id="@+id/HomeDestination_LogTravel_Form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@android:color/darker_gray"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/HomeDestination_LogTravel">
+
+                <EditText
+                    android:id="@+id/HomeDestination_LogTravel_TravelLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Home_Des_LogTravel_TravelLocation" />
+
+                <EditText
+                    android:id="@+id/HomeDestination_LogTravel_StartDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Home_Des_LogTravel_StartDate" />
+
+                <EditText
+                    android:id="@+id/HomeDestination_LogTravel_EndDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Home_Des_LogTravel_EndDate" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/HomeDestination_LogTravel_Cancel"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/black"
+                        android:text="@string/Home_Des_LogTravel_Cancel"
+                        android:textColor="@android:color/white" />
+
+                    <Button
+                        android:id="@+id/HomeDestination_LogTravel_Submit"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/black"
+                        android:text="@string/Home_Des_LogTravel_Submit"
+                        android:textColor="@android:color/white" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Calculate Vacation Time Bottom -->
+            <Button
+                android:id="@+id/HomeDestination_Calculate"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/Home_Des_Calculate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/HomeDestination_LogTravel_Form" />
+
+            <!-- Calculate Vacation Time Form (gone) -->
+            <LinearLayout
+                android:id="@+id/HomeDestination_Calculate_Form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@android:color/darker_gray"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/HomeDestination_Calculate">
+
+                <EditText
+                    android:id="@+id/HomeDestination_Calculate_StartDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Home_Des_Calculate_StartDate" />
+
+                <EditText
+                    android:id="@+id/HomeDestination_Calculate_EndDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Home_Des_Calculate_EndDate" />
+
+                <EditText
+                    android:id="@+id/HomeDestination_Calculate_Duration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Home_Des_Calculate_Duration" />
+
+                <Button
+                    android:id="@+id/HomeDestination_Calculate_Calculate"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/black"
+                    android:text="@string/Home_Des_Calculate_Button"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/log_travel_records_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="20dp" >
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+    <!--  Navigation Bar  -->
+    <LinearLayout
+        android:id="@+id/NavigationBar"
+        android:layout_width="411dp"
+        android:layout_height="85dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/view_des_button_log"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FDF6FE"
+            android:src="@drawable/logistic" />
+
+        <ImageButton
+            android:id="@+id/view_des_button_des"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:backgroundTint="#FDF6FE"
+            android:src="@drawable/destination_fill" />
+
+        <ImageButton
+            android:id="@+id/view_des_button_din"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FDF6FE"
+            android:src="@drawable/dining" />
+
+        <ImageButton
+            android:id="@+id/view_des_button_acc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FDF6FE"
+            android:src="@drawable/accomodations_fill" />
+
+        <ImageButton
+            android:id="@+id/view_des_button_tra"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FDF6FE"
+            android:src="@drawable/travelcommunity" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

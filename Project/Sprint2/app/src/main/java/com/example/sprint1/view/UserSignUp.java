@@ -1,45 +1,45 @@
 package com.example.sprint1.view;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.sprint1.R;
 import com.example.sprint1.viewmodel.MainViewModel;
 
 
 public class UserSignUp extends AppCompatActivity {
-    private EditText username;
-    private EditText password;
+
+    private final MainViewModel mainViewModel = new MainViewModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_sign_up);
-        //find button by id
-        Button registerButton = findViewById(R.id.btn_create_account_register);
-        Button quitButton = findViewById(R.id.quit);
+        setContentView(R.layout.user_signup);
 
-        username = findViewById(R.id.text_username_input);
-        password = findViewById(R.id.text_password_input);
+        this.buttonRegister();
+        this.buttonQuit();
+    }
 
-        MainViewModel mainViewModel = new MainViewModel();
+    private void buttonRegister() {
+        EditText username = findViewById(R.id.text_username_input);
+        EditText password = findViewById(R.id.text_password_input);
 
-        registerButton.setOnClickListener(v -> {
-            //create an intent to go into the Logistic Screen
-            boolean validSignUp = mainViewModel.userSignUp(
-                    username.getText().toString().trim(), password.getText().toString().trim()
+        findViewById(R.id.btn_create_account_register).setOnClickListener(v -> {
+            mainViewModel.userSignUp(
+                username.getText().toString().trim(),
+                password.getText().toString().trim(),
+                success -> {
+                    if (success) {
+                        startActivity(new Intent(UserSignUp.this, UserSignIn.class));
+                        username.setText("");
+                        password.setText("");
+                    }
+                }
             );
-
-            if (validSignUp) {
-                Intent intent = new Intent(UserSignUp.this, UserLogIn.class);
-                startActivity(intent);
-            }
         });
+    }
 
-        quitButton.setOnClickListener(v -> finishAffinity());
+    private void buttonQuit() {
+        findViewById(R.id.quit).setOnClickListener(v -> finishAffinity());
     }
 }

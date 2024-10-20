@@ -13,28 +13,28 @@
         android:theme="@style/Theme.Sprint1"
         tools:targetApi="31">
         <activity
-            android:name=".view.HomeTravelCommunity"
+            android:name=".view.HomeTra"
             android:exported="false" />
         <activity
-            android:name=".view.HomeAccommodations"
+            android:name=".view.HomeAcc"
             android:exported="false" />
         <activity
-            android:name=".view.HomeDiningEstablishments"
+            android:name=".view.HomeDin"
             android:exported="false" />
         <activity
-            android:name=".view.HomeLogistics"
+            android:name=".view.HomeLog"
             android:exported="false" />
         <activity
-            android:name=".view.HomeDestination"
+            android:name=".view.HomeDes"
             android:exported="false" />
         <activity
             android:name=".view.UserSignUp"
             android:exported="false" />
         <activity
-            android:name=".view.UserLogIn"
+            android:name=".view.UserSignIn"
             android:exported="false" />
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.Welcome"
             android:exported="true"
             android:theme="@style/Theme.Sprint1">
             <intent-filter>

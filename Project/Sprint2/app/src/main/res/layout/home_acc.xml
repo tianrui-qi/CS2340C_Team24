@@ -3,24 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.HomeTravelCommunity">
+    tools:context=".view.HomeAcc">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:gravity="center"
-        android:text="@string/travel_screen"
+        android:text="@string/Home_Acc_Title"
         android:textColor="@color/black"
         android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".view.MainActivity" />
+        tools:context=".view.Welcome" />
 
     <LinearLayout
-        android:id="@+id/HomeDestination_NavigationBar"
+        android:id="@+id/NavigationBar"
         android:layout_width="411dp"
         android:layout_height="85dp"
         android:orientation="horizontal"
@@ -29,7 +29,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/view_tra_button_log"
+            android:id="@+id/view_acc_button_log"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -37,7 +37,7 @@
             android:src="@drawable/logistic" />
 
         <ImageButton
-            android:id="@+id/view_tra_button_des"
+            android:id="@+id/view_acc_button_des"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -45,28 +45,28 @@
             android:src="@drawable/destination" />
 
         <ImageButton
-            android:id="@+id/view_tra_button_din"
-            android:layout_width="0dp"
+            android:id="@+id/view_acc_button_din"
+            android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#FDF6FE"
             android:src="@drawable/dining" />
 
         <ImageButton
-            android:id="@+id/view_tra_button_acc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#FDF6FE"
-            android:src="@drawable/accomodations" />
-
-        <ImageButton
-            android:id="@+id/view_tra_button_tra"
+            android:id="@+id/view_acc_button_acc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/travelcommunity_fill" />
+            android:src="@drawable/accomodations_fill" />
+
+        <ImageButton
+            android:id="@+id/view_acc_button_tra"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FDF6FE"
+            android:src="@drawable/travelcommunity" />
 
     </LinearLayout>
 
