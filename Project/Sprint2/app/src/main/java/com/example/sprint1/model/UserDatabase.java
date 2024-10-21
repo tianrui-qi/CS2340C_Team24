@@ -21,7 +21,7 @@ public class UserDatabase {
         return this.usernameCurr;
     }
 
-    public void userSignUp(String username, String password, MainModel.BoolCallback callback) {
+    public void userSignUp(String username, String password, MainModel.CallbackBool callback) {
         DatabaseReference refer = this.userDatabase.child(username);
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -44,7 +44,7 @@ public class UserDatabase {
         });
     }
 
-    public void userSignIn(String username, String password, MainModel.BoolCallback callback) {
+    public void userSignIn(String username, String password, MainModel.CallbackBool callback) {
         DatabaseReference refer = this.userDatabase.child(username);
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -70,16 +70,47 @@ public class UserDatabase {
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                HashMap<String, String> value = new HashMap<>();
-                value.put("startDate", startDate);
-                value.put("endDate", endDate);
-                value.put("duration", duration);
-                refer.setValue(value);
+                HashMap<String, String> vacationData = new HashMap<>();
+                vacationData.put("startDate", startDate);
+                vacationData.put("endDate", endDate);
+                vacationData.put("duration", duration);
+                refer.setValue(vacationData);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+
+    public void getVacation(MainModel.CallbackVacation callback) {
+        DatabaseReference refer = this.userDatabase.child(this.usernameCurr).child("vacation");
+        refer.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Prepare a HashMap to store the vacation data
+                    HashMap<String, String> vacationData = new HashMap<>();
+                    // Extract startDate, endDate, and duration from the snapshot
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        String key = child.getKey();
+                        String value = child.getValue(String.class);
+                        if (key != null && value != null) {
+                            vacationData.put(key, value);
+                        }
+                    }
+                    // Pass the result to the callback
+                    callback.onResult(vacationData);
+                } else {
+                    // If no vacation data exists, return an empty HashMap
+                    callback.onResult(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onResult(null);
             }
         });
     }

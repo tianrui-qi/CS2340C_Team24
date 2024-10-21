@@ -23,7 +23,7 @@ public class DestDatabase {
 
     public void addDestination(
             String travelLocation, String startDate, String endDate, String duration,
-            MainModel.BoolCallback callback
+            MainModel.CallbackBool callback
     ) {
         DatabaseReference refer = this.destDatabase.child(this.usernameCurr).child(travelLocation);
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -49,7 +49,7 @@ public class DestDatabase {
         });
     }
 
-    public void getDestinations(MainModel.DestCallback callback) {
+    public void getDestinations(MainModel.CallbackDestination callback) {
         DatabaseReference refer = this.destDatabase.child(this.usernameCurr);
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

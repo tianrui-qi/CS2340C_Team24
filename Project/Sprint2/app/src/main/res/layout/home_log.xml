@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/logistic_fill" />
+            android:src="@drawable/logistic_fill"
+            android:importantForAccessibility="no" />
 
         <ImageButton
             android:id="@+id/view_log_button_des"
@@ -42,7 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/destination" />
+            android:src="@drawable/destination"
+            android:importantForAccessibility="no" />
 
         <ImageButton
             android:id="@+id/view_log_button_din"
@@ -50,7 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/dining" />
+            android:src="@drawable/dining"
+            android:importantForAccessibility="no" />
 
         <ImageButton
             android:id="@+id/view_log_button_acc"
@@ -58,7 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/accomodations_fill" />
+            android:src="@drawable/accomodations_fill"
+            android:importantForAccessibility="no" />
 
         <ImageButton
             android:id="@+id/view_log_button_tra"
@@ -66,7 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/travelcommunity" />
+            android:src="@drawable/travelcommunity"
+            android:importantForAccessibility="no" />
 
     </LinearLayout>
 

@@ -3,10 +3,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.sprint1.model.MainModel;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Locale;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.util.HashMap;
+import java.util.*;
 
 
 public class MainViewModel extends ViewModel {
@@ -15,7 +13,7 @@ public class MainViewModel extends ViewModel {
 
     /* Main Features */
 
-    public void userSignUp(String username, String password, BoolCallback callback) {
+    public void userSignUp(String username, String password, CallbackBool callback) {
         // check input format
         if (
                 username == null || username.trim().isEmpty()
@@ -28,7 +26,7 @@ public class MainViewModel extends ViewModel {
         this.mainModel.userSignUp(username, password, callback::onResult);
     }
 
-    public void userSignIn(String username, String password, BoolCallback callback) {
+    public void userSignIn(String username, String password, CallbackBool callback) {
         // check input format
         if (
                 username == null || username.trim().isEmpty()
@@ -42,7 +40,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void addDestination(
-        String travelLocation, String startDate, String endDate, BoolCallback callback
+            String travelLocation, String startDate, String endDate, CallbackBool callback
     ) {
         // check input format
         if (
@@ -57,7 +55,9 @@ public class MainViewModel extends ViewModel {
         String duration = null;
         try {
             // check if data valid
-            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
+            DateFormat dateFormat = DateFormat.getDateInstance(
+                    DateFormat.SHORT, java.util.Locale.US
+            );
             dateFormat.setLenient(false);
             Date pStartDate = dateFormat.parse(startDate);
             Date pEndDate = dateFormat.parse(endDate);
@@ -76,12 +76,12 @@ public class MainViewModel extends ViewModel {
         );
     }
 
-    public void getDestinations(DestCallback callback) {
+    public void getDestinations(CallbackDestination callback) {
         this.mainModel.getDestinations(callback::onResult);
     }
 
     public void setVacation(
-            String startDate, String endDate, String duration, BoolCallback callback
+            String startDate, String endDate, String duration, CallbackBool callback
     ) {
         // check input format
         if (!startDate.isEmpty() && !startDate.matches("^\\d{2}/\\d{2}/\\d{4}$")) {
@@ -94,7 +94,9 @@ public class MainViewModel extends ViewModel {
         }
 
         try {
-            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
+            DateFormat dateFormat = DateFormat.getDateInstance(
+                    DateFormat.SHORT, java.util.Locale.US
+            );
             dateFormat.setLenient(false);
 
             Date pStartDate = (startDate.isEmpty()) ? null : dateFormat.parse(startDate);
@@ -137,6 +139,40 @@ public class MainViewModel extends ViewModel {
         }
     }
 
+    public void calVacation(CallbackString callback) {
+        DateFormat dateFormat = DateFormat.getDateInstance(
+                DateFormat.SHORT, java.util.Locale.US
+        );
+        dateFormat.setLenient(false);
+
+        Set<String> uniqueOccupiedDays = new HashSet<>();
+
+        mainModel.getVacation(vacationData -> {
+            mainModel.getDestinations(destinations -> {
+                if (destinations == null || destinations.isEmpty()) {
+                    callback.onResult("0"); // 没有目的地数据，返回 0
+                    return;
+                }
+                for (HashMap<String, String> destination : destinations.values()) {
+                    try {
+                        addOccupiedDays(
+                                uniqueOccupiedDays, dateFormat,
+                                dateFormat.parse(vacationData.get("startDate")),
+                                dateFormat.parse(vacationData.get("endDate")),
+                                dateFormat.parse(destination.get("startDate")),
+                                dateFormat.parse(destination.get("endDate"))
+                        );
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        callback.onResult(null);
+                        return;
+                    }
+                }
+                callback.onResult(String.valueOf(uniqueOccupiedDays.size()));
+            });
+        });
+    }
+
     /* Help Function */
 
     private int calDuration(Date startDate, Date endDate) {
@@ -145,13 +181,34 @@ public class MainViewModel extends ViewModel {
         ) + 1;
     }
 
-    /* Callbacks */
-
-    public interface BoolCallback {
-        void onResult(boolean success);
+    private void addOccupiedDays(
+            Set<String> uniqueOccupiedDays, DateFormat dateFormat,
+            Date vacationStart, Date vacationEnd, Date destStart, Date destEnd
+    ) {
+        Date latestStart = vacationStart.after(destStart) ? vacationStart : destStart;
+        Date earliestEnd = vacationEnd.before(destEnd) ? vacationEnd : destEnd;
+        if (!latestStart.after(earliestEnd)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(latestStart);
+            while (!calendar.getTime().after(earliestEnd)) {
+                String dateStr = dateFormat.format(calendar.getTime());
+                uniqueOccupiedDays.add(dateStr);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
+        }
     }
 
-    public interface DestCallback {
-        void onResult(HashMap<String, HashMap<String, String>> dest);
+    /* Callbacks */
+
+    public interface CallbackBool {
+        void onResult(boolean callback);
+    }
+
+    public interface CallbackString {
+        void onResult(String callback);
+    }
+
+    public interface CallbackDestination {
+        void onResult(HashMap<String, HashMap<String, String>> callback);
     }
 }

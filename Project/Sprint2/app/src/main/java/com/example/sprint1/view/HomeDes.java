@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
+
 import com.example.sprint1.R;
 import com.example.sprint1.viewmodel.MainViewModel;
 import java.util.HashMap;
@@ -26,14 +27,19 @@ public class HomeDes extends AppCompatActivity {
         this.buttonCancel();
         this.buttonCalculate();
         this.formCalculate();
+        this.buttonBack();
         this.listDestination();
         this.buttonNavigationBar();
     }
 
     private void buttonLogTravel() {
         View formLogTravel = findViewById(R.id.HomeDestination_LogTravel_Form);
+        View formCalculate = findViewById(R.id.HomeDestination_Calculate_Form);
+        View resultCalculate = findViewById(R.id.HomeDestination_Calculate_Result);
 
         findViewById(R.id.HomeDestination_LogTravel).setOnClickListener(v -> {
+            formCalculate.setVisibility(View.GONE);
+            resultCalculate.setVisibility(View.GONE);
             if (formLogTravel.getVisibility() == View.VISIBLE) {
                 formLogTravel.setVisibility(View.GONE);
             } else {
@@ -73,9 +79,13 @@ public class HomeDes extends AppCompatActivity {
     }
 
     private void buttonCalculate() {
+        View formLogTravel = findViewById(R.id.HomeDestination_LogTravel_Form);
         View formCalculate = findViewById(R.id.HomeDestination_Calculate_Form);
+        View resultCalculate = findViewById(R.id.HomeDestination_Calculate_Result);
 
         findViewById(R.id.HomeDestination_Calculate).setOnClickListener(v -> {
+            formLogTravel.setVisibility(View.GONE);
+            resultCalculate.setVisibility(View.GONE);
             if (formCalculate.getVisibility() == View.VISIBLE) {
                 formCalculate.setVisibility(View.GONE);
             } else {
@@ -88,21 +98,48 @@ public class HomeDes extends AppCompatActivity {
         EditText startDate = findViewById(R.id.HomeDestination_Calculate_StartDate);
         EditText endDate = findViewById(R.id.HomeDestination_Calculate_EndDate);
         EditText duration = findViewById(R.id.HomeDestination_Calculate_Duration);
+        View formCalculate = findViewById(R.id.HomeDestination_Calculate_Form);
+        View resultCalculate = findViewById(R.id.HomeDestination_Calculate_Result);
+        TextView resultView = findViewById(R.id.HomeDestination_Calculate_Message);
 
         findViewById(R.id.HomeDestination_Calculate_Calculate).setOnClickListener(
-                v -> mainViewModel.setVacation(
-                        startDate.getText().toString().trim(),
-                        endDate.getText().toString().trim(),
-                        duration.getText().toString().trim(),
-                        success -> {
-                            if (success) {
-                                startDate.setText("");
-                                endDate.setText("");
-                                duration.setText("");
+            v -> mainViewModel.setVacation(
+                startDate.getText().toString().trim(),
+                endDate.getText().toString().trim(),
+                duration.getText().toString().trim(),
+                success -> {
+                    if (success) {
+                        startDate.setText("");
+                        endDate.setText("");
+                        duration.setText("");
+                        mainViewModel.calVacation(
+                            occupiedDays -> {
+                                // Update the result view with the occupied days
+                                if (occupiedDays != null) {
+                                    resultView.setText(getString(
+                                            R.string.HomeDestination_Calculate_Message, occupiedDays
+                                    ));
+                                } else {
+                                    resultView.setText(R.string.HomeDestination_Calculate_Error);
+                                }
                             }
-                        }
-                )
+                        );
+                        formCalculate.setVisibility(View.GONE);
+                        resultCalculate.setVisibility(View.VISIBLE);
+                    }
+                }
+            )
         );
+    }
+
+    private void buttonBack() {
+        View formCalculate = findViewById(R.id.HomeDestination_Calculate_Form);
+        View resultCalculate = findViewById(R.id.HomeDestination_Calculate_Result);
+
+        findViewById(R.id.HomeDestination_Calculate_Back).setOnClickListener(v -> {
+            resultCalculate.setVisibility(View.GONE);
+            formCalculate.setVisibility(View.VISIBLE);
+        });
     }
 
     private void listDestination() {
