@@ -1,4 +1,5 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -68,19 +69,25 @@
                     android:id="@+id/HomeDestination_LogTravel_TravelLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/Home_Des_LogTravel_TravelLocation" />
+                    android:hint="@string/Home_Des_LogTravel_TravelLocation"
+                    android:autofillHints="no"
+                    android:inputType="text" />
 
                 <EditText
                     android:id="@+id/HomeDestination_LogTravel_StartDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/Home_Des_LogTravel_StartDate" />
+                    android:hint="@string/Home_Des_LogTravel_StartDate"
+                    android:autofillHints="no"
+                    android:inputType="date" />
 
                 <EditText
                     android:id="@+id/HomeDestination_LogTravel_EndDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/Home_Des_LogTravel_EndDate" />
+                    android:hint="@string/Home_Des_LogTravel_EndDate"
+                    android:autofillHints="no"
+                    android:inputType="date" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -124,6 +131,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="15dp"
                 android:text="@string/Home_Des_Calculate"
+                android:importantForAccessibility="yes"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/HomeDestination_LogTravel_Form" />
@@ -147,19 +155,26 @@
                     android:id="@+id/HomeDestination_Calculate_StartDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/Home_Des_Calculate_StartDate" />
+                    android:hint="@string/Home_Des_Calculate_StartDate"
+                    android:inputType="date"
+                    android:autofillHints="no" />
 
                 <EditText
                     android:id="@+id/HomeDestination_Calculate_EndDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/Home_Des_Calculate_EndDate" />
+                    android:hint="@string/Home_Des_Calculate_EndDate"
+                    android:inputType="date"
+                    android:autofillHints="no" />
 
                 <EditText
                     android:id="@+id/HomeDestination_Calculate_Duration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/Home_Des_Calculate_Duration" />
+                    android:hint="@string/Home_Des_Calculate_Duration"
+                    android:inputType="number"
+                    android:importantForAutofill="no"
+                    android:autofillHints="no" />
 
                 <Button
                     android:id="@+id/HomeDestination_Calculate_Calculate"
@@ -172,6 +187,37 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/black"
                     android:text="@string/Home_Des_Calculate_Button"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <!-- Calculate Result (gone) -->
+            <LinearLayout
+                android:id="@+id/HomeDestination_Calculate_Result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@android:color/darker_gray"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/HomeDestination_Calculate_Message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:text="@string/HomeDestination_Calculate_Message" />
+
+                <Button
+                    android:id="@+id/HomeDestination_Calculate_Back"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:backgroundTint="@color/black"
+                    android:text="@string/HomeDestination_Calculate_Back"
                     android:textColor="@android:color/white" />
             </LinearLayout>
 
@@ -204,7 +250,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/logistic" />
+            android:src="@drawable/logistic"
+            android:importantForAccessibility="no" />
 
         <ImageButton
             android:id="@+id/view_des_button_des"
@@ -212,7 +259,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/destination_fill" />
+            android:src="@drawable/destination_fill"
+            android:importantForAccessibility="no" />
 
         <ImageButton
             android:id="@+id/view_des_button_din"
@@ -220,7 +268,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/dining" />
+            android:src="@drawable/dining"
+            android:importantForAccessibility="no" />
 
         <ImageButton
             android:id="@+id/view_des_button_acc"
@@ -228,7 +277,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/accomodations_fill" />
+            android:src="@drawable/accomodations_fill"
+            android:importantForAccessibility="no" />
 
         <ImageButton
             android:id="@+id/view_des_button_tra"
@@ -236,7 +286,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#FDF6FE"
-            android:src="@drawable/travelcommunity" />
+            android:src="@drawable/travelcommunity"
+            android:importantForAccessibility="no" />
 
     </LinearLayout>
 

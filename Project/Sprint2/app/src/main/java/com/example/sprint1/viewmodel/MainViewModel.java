@@ -3,10 +3,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.sprint1.model.MainModel;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Locale;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.util.HashMap;
+import java.util.*;
 
 
 public class MainViewModel extends ViewModel {
@@ -15,7 +13,7 @@ public class MainViewModel extends ViewModel {
 
     /* Main Features */
 
-    public void userSignUp(String username, String password, BoolCallback callback) {
+    public void userSignUp(String username, String password, CallbackBool callback) {
         // check input format
         if (
                 username == null || username.trim().isEmpty()
@@ -28,7 +26,7 @@ public class MainViewModel extends ViewModel {
         this.mainModel.userSignUp(username, password, callback::onResult);
     }
 
-    public void userSignIn(String username, String password, BoolCallback callback) {
+    public void userSignIn(String username, String password, CallbackBool callback) {
         // check input format
         if (
                 username == null || username.trim().isEmpty()
@@ -42,7 +40,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void addDestination(
-        String travelLocation, String startDate, String endDate, BoolCallback callback
+            String travelLocation, String startDate, String endDate, CallbackBool callback
     ) {
         // check input format
         if (
@@ -54,10 +52,12 @@ public class MainViewModel extends ViewModel {
             return;
         }
 
-        String duration = null;
+        String duration;
         try {
             // check if data valid
-            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
+            DateFormat dateFormat = DateFormat.getDateInstance(
+                    DateFormat.SHORT, java.util.Locale.US
+            );
             dateFormat.setLenient(false);
             Date pStartDate = dateFormat.parse(startDate);
             Date pEndDate = dateFormat.parse(endDate);
@@ -69,6 +69,7 @@ public class MainViewModel extends ViewModel {
             duration = String.valueOf(this.calDuration(pStartDate, pEndDate));
         } catch (ParseException e) {
             callback.onResult(false);
+            return;
         }
 
         this.mainModel.addDestination(
@@ -76,12 +77,12 @@ public class MainViewModel extends ViewModel {
         );
     }
 
-    public void getDestinations(DestCallback callback) {
+    public void getDestinations(CallbackDestination callback) {
         this.mainModel.getDestinations(callback::onResult);
     }
 
     public void setVacation(
-            String startDate, String endDate, String duration, BoolCallback callback
+            String startDate, String endDate, String duration, CallbackBool callback
     ) {
         // check input format
         if (!startDate.isEmpty() && !startDate.matches("^\\d{2}/\\d{2}/\\d{4}$")) {
@@ -94,7 +95,9 @@ public class MainViewModel extends ViewModel {
         }
 
         try {
-            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
+            DateFormat dateFormat = DateFormat.getDateInstance(
+                    DateFormat.SHORT, java.util.Locale.US
+            );
             dateFormat.setLenient(false);
 
             Date pStartDate = (startDate.isEmpty()) ? null : dateFormat.parse(startDate);
@@ -104,8 +107,7 @@ public class MainViewModel extends ViewModel {
             if (pStartDate != null && pEndDate != null && pDuration != null) {
                 // case 1: all three values are present
                 if (calDuration(pStartDate, pEndDate) == pDuration) {
-                    this.mainModel.setVacation(startDate, endDate, duration);
-                    callback.onResult(true);
+                    this.mainModel.setVacation(startDate, endDate, duration, callback::onResult);
                 } else {
                     callback.onResult(false);
                 }
@@ -113,21 +115,24 @@ public class MainViewModel extends ViewModel {
                 // case 4: missing duration, calculate it
                 pDuration = calDuration(pStartDate, pEndDate);
                 if (pDuration > 0) {
-                    this.mainModel.setVacation(startDate, endDate, String.valueOf(pDuration));
-                    callback.onResult(true);
+                    this.mainModel.setVacation(
+                            startDate, endDate, String.valueOf(pDuration), callback::onResult
+                    );
                 } else {
                     callback.onResult(false);
                 }
             } else if (pStartDate != null && pDuration != null) {
                 // case 3: missing endDate, calculate it
                 pEndDate = new Date(pStartDate.getTime() + TimeUnit.DAYS.toMillis(pDuration - 1));
-                this.mainModel.setVacation(startDate, dateFormat.format(pEndDate), duration);
-                callback.onResult(true);
+                this.mainModel.setVacation(
+                        startDate, dateFormat.format(pEndDate), duration, callback::onResult
+                );
             } else if (pEndDate != null && pDuration != null) {
                 // case 2: missing startDate, calculate it
                 pStartDate = new Date(pEndDate.getTime() - TimeUnit.DAYS.toMillis(pDuration - 1));
-                this.mainModel.setVacation(dateFormat.format(pStartDate), endDate, duration);
-                callback.onResult(true);
+                this.mainModel.setVacation(
+                        dateFormat.format(pStartDate), endDate, duration, callback::onResult
+                );
             } else {
                 // case 5: all null
                 callback.onResult(false);
@@ -135,6 +140,52 @@ public class MainViewModel extends ViewModel {
         } catch (ParseException | NumberFormatException e) {
             callback.onResult(false);
         }
+    }
+
+    public void calVacation(CallbackString callback) {
+        DateFormat dateFormat = DateFormat.getDateInstance(
+                DateFormat.SHORT, java.util.Locale.US
+        );
+        dateFormat.setLenient(false);
+
+        Set<String> uniqueOccupiedDays = new HashSet<>();
+
+        mainModel.getVacation(vacationData -> mainModel.getDestinations(destinations -> {
+            if (destinations == null || destinations.isEmpty()) {
+                callback.onResult("0"); // 没有目的地数据，返回 0
+                return;
+            }
+            for (HashMap<String, String> destination : destinations.values()) {
+                try {
+                    String vacationStart = vacationData.get("startDate");
+                    String vacationEnd = vacationData.get("endDate");
+                    String destStart = destination.get("startDate");
+                    String destEnd = destination.get("endDate");
+                    if (vacationStart == null || vacationEnd == null
+                            || destStart == null || destEnd == null) {
+                        callback.onResult(null);
+                        return;
+                    }
+
+                    Date pVacationStart = dateFormat.parse(vacationStart);
+                    Date pVacationEnd = dateFormat.parse(vacationEnd);
+                    if (pVacationStart == null || pVacationEnd == null) {
+                        callback.onResult(null);
+                        return;
+                    }
+
+                    addOccupiedDays(
+                            uniqueOccupiedDays, dateFormat,
+                            pVacationStart, pVacationEnd,
+                            dateFormat.parse(destStart), dateFormat.parse(destEnd)
+                    );
+                } catch (ParseException e) {
+                    callback.onResult(null);
+                    return;
+                }
+            }
+            callback.onResult(String.valueOf(uniqueOccupiedDays.size()));
+        }));
     }
 
     /* Help Function */
@@ -145,13 +196,34 @@ public class MainViewModel extends ViewModel {
         ) + 1;
     }
 
-    /* Callbacks */
-
-    public interface BoolCallback {
-        void onResult(boolean success);
+    private void addOccupiedDays(
+            Set<String> uniqueOccupiedDays, DateFormat dateFormat,
+            Date vacationStart, Date vacationEnd, Date destStart, Date destEnd
+    ) {
+        Date latestStart = vacationStart.after(destStart) ? vacationStart : destStart;
+        Date earliestEnd = vacationEnd.before(destEnd) ? vacationEnd : destEnd;
+        if (!latestStart.after(earliestEnd)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(latestStart);
+            while (!calendar.getTime().after(earliestEnd)) {
+                String dateStr = dateFormat.format(calendar.getTime());
+                uniqueOccupiedDays.add(dateStr);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
+        }
     }
 
-    public interface DestCallback {
-        void onResult(HashMap<String, HashMap<String, String>> dest);
+    /* Callbacks */
+
+    public interface CallbackBool {
+        void onResult(boolean callback);
+    }
+
+    public interface CallbackString {
+        void onResult(String callback);
+    }
+
+    public interface CallbackDestination {
+        void onResult(HashMap<String, HashMap<String, String>> callback);
     }
 }
