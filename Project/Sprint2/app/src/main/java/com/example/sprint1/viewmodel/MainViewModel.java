@@ -106,8 +106,7 @@ public class MainViewModel extends ViewModel {
             if (pStartDate != null && pEndDate != null && pDuration != null) {
                 // case 1: all three values are present
                 if (calDuration(pStartDate, pEndDate) == pDuration) {
-                    this.mainModel.setVacation(startDate, endDate, duration);
-                    callback.onResult(true);
+                    this.mainModel.setVacation(startDate, endDate, duration, callback::onResult);
                 } else {
                     callback.onResult(false);
                 }
@@ -115,21 +114,24 @@ public class MainViewModel extends ViewModel {
                 // case 4: missing duration, calculate it
                 pDuration = calDuration(pStartDate, pEndDate);
                 if (pDuration > 0) {
-                    this.mainModel.setVacation(startDate, endDate, String.valueOf(pDuration));
-                    callback.onResult(true);
+                    this.mainModel.setVacation(
+                            startDate, endDate, String.valueOf(pDuration), callback::onResult
+                    );
                 } else {
                     callback.onResult(false);
                 }
             } else if (pStartDate != null && pDuration != null) {
                 // case 3: missing endDate, calculate it
                 pEndDate = new Date(pStartDate.getTime() + TimeUnit.DAYS.toMillis(pDuration - 1));
-                this.mainModel.setVacation(startDate, dateFormat.format(pEndDate), duration);
-                callback.onResult(true);
+                this.mainModel.setVacation(
+                        startDate, dateFormat.format(pEndDate), duration, callback::onResult
+                );
             } else if (pEndDate != null && pDuration != null) {
                 // case 2: missing startDate, calculate it
                 pStartDate = new Date(pEndDate.getTime() - TimeUnit.DAYS.toMillis(pDuration - 1));
-                this.mainModel.setVacation(dateFormat.format(pStartDate), endDate, duration);
-                callback.onResult(true);
+                this.mainModel.setVacation(
+                        dateFormat.format(pStartDate), endDate, duration, callback::onResult
+                );
             } else {
                 // case 5: all null
                 callback.onResult(false);
@@ -147,30 +149,42 @@ public class MainViewModel extends ViewModel {
 
         Set<String> uniqueOccupiedDays = new HashSet<>();
 
-        mainModel.getVacation(vacationData -> {
-            mainModel.getDestinations(destinations -> {
-                if (destinations == null || destinations.isEmpty()) {
-                    callback.onResult("0"); // 没有目的地数据，返回 0
-                    return;
-                }
-                for (HashMap<String, String> destination : destinations.values()) {
-                    try {
-                        addOccupiedDays(
-                                uniqueOccupiedDays, dateFormat,
-                                dateFormat.parse(vacationData.get("startDate")),
-                                dateFormat.parse(vacationData.get("endDate")),
-                                dateFormat.parse(destination.get("startDate")),
-                                dateFormat.parse(destination.get("endDate"))
-                        );
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+        mainModel.getVacation(vacationData -> mainModel.getDestinations(destinations -> {
+            if (destinations == null || destinations.isEmpty()) {
+                callback.onResult("0"); // 没有目的地数据，返回 0
+                return;
+            }
+            for (HashMap<String, String> destination : destinations.values()) {
+                try {
+                    String vacationStart = vacationData.get("startDate");
+                    String vacationEnd = vacationData.get("endDate");
+                    String destStart = destination.get("startDate");
+                    String destEnd = destination.get("endDate");
+                    if (vacationStart == null || vacationEnd == null
+                            || destStart == null || destEnd == null) {
                         callback.onResult(null);
                         return;
                     }
+
+                    Date pVacationStart = dateFormat.parse(vacationStart);
+                    Date pVacationEnd = dateFormat.parse(vacationEnd);
+                    if (pVacationStart == null || pVacationEnd == null) {
+                        callback.onResult(null);
+                        return;
+                    }
+
+                    addOccupiedDays(
+                            uniqueOccupiedDays, dateFormat,
+                            pVacationStart, pVacationEnd,
+                            dateFormat.parse(destStart), dateFormat.parse(destEnd)
+                    );
+                } catch (ParseException e) {
+                    callback.onResult(null);
+                    return;
                 }
-                callback.onResult(String.valueOf(uniqueOccupiedDays.size()));
-            });
-        });
+            }
+            callback.onResult(String.valueOf(uniqueOccupiedDays.size()));
+        }));
     }
 
     /* Help Function */

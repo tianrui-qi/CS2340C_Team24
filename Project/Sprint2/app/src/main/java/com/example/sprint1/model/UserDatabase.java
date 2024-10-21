@@ -65,7 +65,9 @@ public class UserDatabase {
         });
     }
 
-    public void setVacation(String startDate, String endDate, String duration) {
+    public void setVacation(
+            String startDate, String endDate, String duration, MainModel.CallbackBool callback
+    ) {
         DatabaseReference refer = this.userDatabase.child(this.usernameCurr).child("vacation");
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -75,11 +77,12 @@ public class UserDatabase {
                 vacationData.put("endDate", endDate);
                 vacationData.put("duration", duration);
                 refer.setValue(vacationData);
+                callback.onResult(true);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                callback.onResult(false);
             }
         });
     }

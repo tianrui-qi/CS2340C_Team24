@@ -39,7 +39,7 @@ public class MainModel {
 
     public void addDestination(
             String travelLocation, String startDate, String endDate, String duration,
-            MainModel.CallbackBool callback
+            CallbackBool callback
     ) {
         this.destDatabase.addDestination(travelLocation, startDate, endDate, duration, callback);
     }
@@ -48,8 +48,9 @@ public class MainModel {
         this.destDatabase.getDestinations(callback);
     }
 
-    public void setVacation(String startDate, String endDate, String duration) {
-        this.userDatabase.setVacation(startDate, endDate, duration);
+    public void setVacation(
+            String startDate, String endDate, String duration, CallbackBool callback) {
+        this.userDatabase.setVacation(startDate, endDate, duration, callback);
     }
 
     public void getVacation(CallbackVacation callback) {
