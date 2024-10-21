@@ -52,7 +52,7 @@ public class MainViewModel extends ViewModel {
             return;
         }
 
-        String duration = null;
+        String duration;
         try {
             // check if data valid
             DateFormat dateFormat = DateFormat.getDateInstance(
@@ -69,6 +69,7 @@ public class MainViewModel extends ViewModel {
             duration = String.valueOf(this.calDuration(pStartDate, pEndDate));
         } catch (ParseException e) {
             callback.onResult(false);
+            return;
         }
 
         this.mainModel.addDestination(
