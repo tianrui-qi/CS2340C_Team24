@@ -22,6 +22,7 @@
     <string name="Home_Des_Calculate_EndDate">End Date (MM/DD/YYYY)</string>
     <string name="Home_Des_Calculate_Duration">Duration</string>
     <string name="Home_Des_Calculate_Button">Calculate</string>
+    <string name="Home_Des_ListDes_Empty">No travel records found.</string>
     <!--  home_log  -->
     <string name="Home_Log_Title">Logistics</string>
     <!--  home_din  -->

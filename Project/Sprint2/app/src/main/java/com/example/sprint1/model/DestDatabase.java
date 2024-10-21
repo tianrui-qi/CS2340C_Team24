@@ -21,11 +21,12 @@ public class DestDatabase {
         this.usernameCurr = username;
     }
 
-    public void destLogTravel(
+    public void addDestination(
             String travelLocation, String startDate, String endDate, String duration,
-            MainModel.AuthCallback callback
+            MainModel.BoolCallback callback
     ) {
-        this.destDatabase.child(usernameCurr).child(travelLocation).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference refer = this.destDatabase.child(this.usernameCurr).child(travelLocation);
+        refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -44,6 +45,36 @@ public class DestDatabase {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 callback.onResult(false);
+            }
+        });
+    }
+
+    public void getDestinations(MainModel.DestCallback callback) {
+        DatabaseReference refer = this.destDatabase.child(this.usernameCurr);
+        refer.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    HashMap<String, HashMap<String, String>> dest = new HashMap<>();
+                    for (DataSnapshot destinationSnapshot : dataSnapshot.getChildren()) {
+                        String travelLocation = destinationSnapshot.getKey();
+                        HashMap<String, String> destinationDetails = new HashMap<>();
+                        for (DataSnapshot detailSnapshot : destinationSnapshot.getChildren()) {
+                            String key = detailSnapshot.getKey();
+                            String value = detailSnapshot.getValue(String.class);
+                            destinationDetails.put(key, value);
+                        }
+                        dest.put(travelLocation, destinationDetails);
+                    }
+                    callback.onResult(dest);
+                } else {
+                    callback.onResult(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onResult(null);
             }
         });
     }

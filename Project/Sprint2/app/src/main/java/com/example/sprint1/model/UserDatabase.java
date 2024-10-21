@@ -21,11 +21,9 @@ public class UserDatabase {
         return this.usernameCurr;
     }
 
-    public void userSignUp(
-            String username, String password,
-            MainModel.AuthCallback callback
-    ) {
-        this.userDatabase.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void userSignUp(String username, String password, MainModel.BoolCallback callback) {
+        DatabaseReference refer = this.userDatabase.child(username);
+        refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -46,11 +44,9 @@ public class UserDatabase {
         });
     }
 
-    public void userSignIn(
-            String username, String password,
-            MainModel.AuthCallback callback
-    ) {
-        this.userDatabase.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void userSignIn(String username, String password, MainModel.BoolCallback callback) {
+        DatabaseReference refer = this.userDatabase.child(username);
+        refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String passwordStored = dataSnapshot.child("password").getValue(String.class);
@@ -65,6 +61,25 @@ public class UserDatabase {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 callback.onResult(false);
+            }
+        });
+    }
+
+    public void setVacation(String startDate, String endDate, String duration) {
+        DatabaseReference refer = this.userDatabase.child(this.usernameCurr).child("vacation");
+        refer.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                HashMap<String, String> value = new HashMap<>();
+                value.put("startDate", startDate);
+                value.put("endDate", endDate);
+                value.put("duration", duration);
+                refer.setValue(value);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
