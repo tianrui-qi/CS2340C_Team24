@@ -16,17 +16,17 @@ public class HomeDin extends AppCompatActivity {
     }
 
     private void buttonNavigationBar() {
-        findViewById(R.id.view_din_button_log).setOnClickListener(v -> {
-            startActivity(new Intent(HomeDin.this, HomeLog.class));
-        });
-        findViewById(R.id.view_din_button_des).setOnClickListener(v -> {
-            startActivity(new Intent(HomeDin.this, HomeDes.class));
-        });
-        findViewById(R.id.view_din_button_acc).setOnClickListener(v -> {
-            startActivity(new Intent(HomeDin.this, HomeAcc.class));
-        });
-        findViewById(R.id.view_din_button_tra).setOnClickListener(v -> {
-            startActivity(new Intent(HomeDin.this, HomeTra.class));
-        });
+        findViewById(R.id.view_din_button_log).setOnClickListener(
+                v -> startActivity(new Intent(HomeDin.this, HomeLog.class))
+        );
+        findViewById(R.id.view_din_button_des).setOnClickListener(
+                v -> startActivity(new Intent(HomeDin.this, HomeDes.class))
+        );
+        findViewById(R.id.view_din_button_acc).setOnClickListener(
+                v -> startActivity(new Intent(HomeDin.this, HomeAcc.class))
+        );
+        findViewById(R.id.view_din_button_tra).setOnClickListener(
+                v -> startActivity(new Intent(HomeDin.this, HomeTra.class))
+        );
     }
 }

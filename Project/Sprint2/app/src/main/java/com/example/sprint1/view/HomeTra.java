@@ -16,17 +16,17 @@ public class HomeTra extends AppCompatActivity {
     }
 
     private void buttonNavigationBar() {
-        findViewById(R.id.view_tra_button_log).setOnClickListener(v -> {
-            startActivity(new Intent(HomeTra.this, HomeLog.class));
-        });
-        findViewById(R.id.view_tra_button_des).setOnClickListener(v -> {
-            startActivity(new Intent(HomeTra.this, HomeDes.class));
-        });
-        findViewById(R.id.view_tra_button_din).setOnClickListener(v -> {
-            startActivity(new Intent(HomeTra.this, HomeDin.class));
-        });
-        findViewById(R.id.view_tra_button_acc).setOnClickListener(v -> {
-            startActivity(new Intent(HomeTra.this, HomeAcc.class));
-        });
+        findViewById(R.id.view_tra_button_log).setOnClickListener(
+                v -> startActivity(new Intent(HomeTra.this, HomeLog.class))
+        );
+        findViewById(R.id.view_tra_button_des).setOnClickListener(
+                v -> startActivity(new Intent(HomeTra.this, HomeDes.class))
+        );
+        findViewById(R.id.view_tra_button_din).setOnClickListener(
+                v -> startActivity(new Intent(HomeTra.this, HomeDin.class))
+        );
+        findViewById(R.id.view_tra_button_acc).setOnClickListener(
+                v -> startActivity(new Intent(HomeTra.this, HomeAcc.class))
+        );
     }
 }

@@ -24,19 +24,19 @@ public class UserSignUp extends AppCompatActivity {
         EditText username = findViewById(R.id.text_username_input);
         EditText password = findViewById(R.id.text_password_input);
 
-        findViewById(R.id.btn_create_account_register).setOnClickListener(v -> {
-            mainViewModel.userSignUp(
-                username.getText().toString().trim(),
-                password.getText().toString().trim(),
-                success -> {
-                    if (success) {
-                        startActivity(new Intent(UserSignUp.this, UserSignIn.class));
-                        username.setText("");
-                        password.setText("");
+        findViewById(R.id.btn_create_account_register).setOnClickListener(
+                v -> mainViewModel.userSignUp(
+                    username.getText().toString().trim(),
+                    password.getText().toString().trim(),
+                    success -> {
+                        if (success) {
+                            startActivity(new Intent(UserSignUp.this, UserSignIn.class));
+                            username.setText("");
+                            password.setText("");
+                        }
                     }
-                }
-            );
-        });
+                )
+        );
     }
 
     private void buttonQuit() {

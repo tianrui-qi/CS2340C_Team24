@@ -28,25 +28,25 @@ public class UserSignIn extends AppCompatActivity {
         EditText username = findViewById(R.id.text_username_input);
         EditText password = findViewById(R.id.text_password_input);
 
-        findViewById(R.id.btn_login).setOnClickListener(v -> {
-            mainViewModel.userSignIn(
-                    username.getText().toString().trim(),
-                    password.getText().toString().trim(),
-                    success -> {
-                        if (success) {
-                            startActivity(new Intent(UserSignIn.this, HomeLog.class));
-                            username.setText("");
-                            password.setText("");
+        findViewById(R.id.btn_login).setOnClickListener(
+                v -> mainViewModel.userSignIn(
+                        username.getText().toString().trim(),
+                        password.getText().toString().trim(),
+                        success -> {
+                            if (success) {
+                                startActivity(new Intent(UserSignIn.this, HomeLog.class));
+                                username.setText("");
+                                password.setText("");
+                            }
                         }
-                    }
-            );
-        });
+                )
+        );
     }
 
     private void buttonCreateAccount() {
-        findViewById(R.id.btn_create_account).setOnClickListener(v -> {
-            startActivity(new Intent(UserSignIn.this, UserSignUp.class));
-        });
+        findViewById(R.id.btn_create_account).setOnClickListener(
+                v -> startActivity(new Intent(UserSignIn.this, UserSignUp.class))
+        );
     }
 
     private void buttonQuit() {
