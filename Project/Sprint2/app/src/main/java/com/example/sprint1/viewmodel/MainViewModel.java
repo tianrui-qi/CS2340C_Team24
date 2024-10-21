@@ -1,10 +1,17 @@
 package com.example.sprint1.viewmodel;
+
 import androidx.lifecycle.ViewModel;
+
 import com.example.sprint1.model.MainModel;
+
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.*;
 
 
 public class MainViewModel extends ViewModel {
@@ -17,7 +24,7 @@ public class MainViewModel extends ViewModel {
         // check input format
         if (
                 username == null || username.trim().isEmpty()
-                || password == null || password.trim().isEmpty()
+                        || password == null || password.trim().isEmpty()
         ) {
             callback.onResult(false);
             return;
@@ -30,7 +37,7 @@ public class MainViewModel extends ViewModel {
         // check input format
         if (
                 username == null || username.trim().isEmpty()
-                || password == null || password.trim().isEmpty()
+                        || password == null || password.trim().isEmpty()
         ) {
             callback.onResult(false);
             return;
@@ -45,8 +52,8 @@ public class MainViewModel extends ViewModel {
         // check input format
         if (
                 travelLocation == null || travelLocation.trim().isEmpty()
-                || startDate == null || !startDate.matches("^\\d{2}/\\d{2}/\\d{4}$")
-                || endDate == null || !endDate.matches("^\\d{2}/\\d{2}/\\d{4}$")
+                        || startDate == null || !startDate.matches("^\\d{2}/\\d{2}/\\d{4}$")
+                        || endDate == null || !endDate.matches("^\\d{2}/\\d{2}/\\d{4}$")
         ) {
             callback.onResult(false);
             return;
@@ -142,6 +149,10 @@ public class MainViewModel extends ViewModel {
         }
     }
 
+    public void getVacation(CallbackVacation callback) {
+        this.mainModel.getVacation(callback::onResult);
+    }
+
     public void calVacation(CallbackString callback) {
         DateFormat dateFormat = DateFormat.getDateInstance(
                 DateFormat.SHORT, java.util.Locale.US
@@ -225,5 +236,9 @@ public class MainViewModel extends ViewModel {
 
     public interface CallbackDestination {
         void onResult(HashMap<String, HashMap<String, String>> callback);
+    }
+
+    public interface CallbackVacation {
+        void onResult(HashMap<String, String> callback);
     }
 }

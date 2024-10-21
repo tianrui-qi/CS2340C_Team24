@@ -1,15 +1,18 @@
 package com.example.sprint1.view;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.LayoutInflater;
 
 import com.example.sprint1.R;
 import com.example.sprint1.viewmodel.MainViewModel;
+
 import java.util.HashMap;
 
 
@@ -55,17 +58,17 @@ public class HomeDes extends AppCompatActivity {
 
         findViewById(R.id.HomeDestination_LogTravel_Submit).setOnClickListener(
                 v -> mainViewModel.addDestination(
-                    travelLocation.getText().toString().trim(),
-                    startDate.getText().toString().trim(),
-                    endDate.getText().toString().trim(),
-                    success -> {
-                        if (success) {
-                            travelLocation.setText("");
-                            startDate.setText("");
-                            endDate.setText("");
-                            this.listDestination();
+                        travelLocation.getText().toString().trim(),
+                        startDate.getText().toString().trim(),
+                        endDate.getText().toString().trim(),
+                        success -> {
+                            if (success) {
+                                travelLocation.setText("");
+                                startDate.setText("");
+                                endDate.setText("");
+                                this.listDestination();
+                            }
                         }
-                    }
                 )
         );
     }
@@ -103,32 +106,32 @@ public class HomeDes extends AppCompatActivity {
         TextView resultView = findViewById(R.id.HomeDestination_Calculate_Message);
 
         findViewById(R.id.HomeDestination_Calculate_Calculate).setOnClickListener(
-            v -> mainViewModel.setVacation(
-                startDate.getText().toString().trim(),
-                endDate.getText().toString().trim(),
-                duration.getText().toString().trim(),
-                success -> {
-                    if (success) {
-                        startDate.setText("");
-                        endDate.setText("");
-                        duration.setText("");
-                        mainViewModel.calVacation(
-                            occupiedDays -> {
-                                // Update the result view with the occupied days
-                                if (occupiedDays != null) {
-                                    resultView.setText(getString(
-                                            R.string.HomeDestination_Calculate_Message, occupiedDays
-                                    ));
-                                } else {
-                                    resultView.setText(R.string.HomeDestination_Calculate_Error);
-                                }
+                v -> mainViewModel.setVacation(
+                        startDate.getText().toString().trim(),
+                        endDate.getText().toString().trim(),
+                        duration.getText().toString().trim(),
+                        success -> {
+                            if (success) {
+                                startDate.setText("");
+                                endDate.setText("");
+                                duration.setText("");
+                                mainViewModel.calVacation(
+                                        occupiedDays -> {
+                                            // Update the result view with the occupied days
+                                            if (occupiedDays != null) {
+                                                resultView.setText(getString(
+                                                        R.string.HomeDestination_Calculate_Message, occupiedDays
+                                                ));
+                                            } else {
+                                                resultView.setText(R.string.HomeDestination_Calculate_Error);
+                                            }
+                                        }
+                                );
+                                formCalculate.setVisibility(View.GONE);
+                                resultCalculate.setVisibility(View.VISIBLE);
                             }
-                        );
-                        formCalculate.setVisibility(View.GONE);
-                        resultCalculate.setVisibility(View.VISIBLE);
-                    }
-                }
-            )
+                        }
+                )
         );
     }
 
