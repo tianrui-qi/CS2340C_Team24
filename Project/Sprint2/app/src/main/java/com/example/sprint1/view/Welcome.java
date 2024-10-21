@@ -1,8 +1,11 @@
 package com.example.sprint1.view;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.sprint1.R;
 
 
