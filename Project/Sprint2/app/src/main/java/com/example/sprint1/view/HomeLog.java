@@ -59,14 +59,14 @@ public class HomeLog extends AppCompatActivity {
 
         pieChart.animateY(1000, Easing.EaseInOutQuad);
 
-        mainViewModel.getVacation(
-                vacationData -> mainViewModel.calVacation(
-                        arrangedDaysStr -> updateVisualization(
-                                Integer.parseInt(arrangedDaysStr),
-                                Integer.parseInt(Objects.requireNonNull(vacationData.get("duration")))
-                        )
-                )
-        );
+        mainViewModel.getVacation(vacationData -> {
+            if (vacationData != null) {
+                mainViewModel.calVacation(arrangedDaysStr -> updateVisualization(
+                        Integer.parseInt(arrangedDaysStr),
+                        Integer.parseInt(Objects.requireNonNull(vacationData.get("duration")))
+                ));
+            }
+        });
     }
 
     private void updateVisualization(int arrangedDays, int totalDays) {
