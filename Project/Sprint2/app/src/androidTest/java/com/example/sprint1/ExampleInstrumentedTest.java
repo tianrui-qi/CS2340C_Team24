@@ -333,6 +333,117 @@ public class ExampleInstrumentedTest {
 
     }
 
+    @Test
+    public void testLogTravelWithEmptyLocation() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+
+        mainViewModel.addDestination("", "01/01/2023", "01/10/2023", result -> {
+            callbackResult = result;
+            latch.countDown();
+        });
+
+        latch.await(5, TimeUnit.SECONDS);
+        assertFalse(callbackResult);
+    }
+
+    @Test
+    public void testLogTravelEntryStoredInDatabase() throws InterruptedException {
+
+        CountDownLatch signInLatch = new CountDownLatch(1);
+        mainViewModel.userSignIn("testUser", "testPassword", result -> {
+            callbackResult = result;
+            signInLatch.countDown();
+        });
+        signInLatch.await(5, TimeUnit.SECONDS);
+        assertTrue(callbackResult);
+
+
+        CountDownLatch addDestinationLatch = new CountDownLatch(1);
+        mainViewModel.addDestination("TestLocation", "01/01/2023", "01/10/2023", result -> {
+            callbackResult = result;
+            addDestinationLatch.countDown();
+        });
+        addDestinationLatch.await(5, TimeUnit.SECONDS);
+        assertTrue(callbackResult);
+
+
+        CountDownLatch getDestinationLatch = new CountDownLatch(1);
+        mainViewModel.getDestinations(result -> {
+            destinationsResult = result;
+            getDestinationLatch.countDown();
+        });
+        getDestinationLatch.await(5, TimeUnit.SECONDS);
+
+        assertNotNull(destinationsResult);
+        assertTrue(destinationsResult.containsKey("TestLocation"));
+    }
+
+    @Test
+    public void testAccountCreationWithWhitespaceOnlyInput() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        mainViewModel.userSignUp("   ", "validPassword", result -> {
+            callbackResult = result;
+            latch.countDown();
+        });
+        latch.await(5, TimeUnit.SECONDS);
+        assertFalse(callbackResult);
+    }
+
+    @Test
+    public void testAccountCreationWithNullInput() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        mainViewModel.userSignUp(null, "validPassword", result -> {
+            callbackResult = result;
+            latch.countDown();
+        });
+        latch.await(5, TimeUnit.SECONDS);
+        assertFalse(callbackResult);
+    }
+
+    @Test
+    public void testAccountCreationWithEmptyStringInput() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        mainViewModel.userSignUp("", "validPassword", result -> {
+            callbackResult = result;
+            latch.countDown();
+        });
+        latch.await(5, TimeUnit.SECONDS);
+        assertFalse(callbackResult);
+    }
+
+    @Test
+    public void testAccountLoginWithWhitespaceOnlyInput() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        mainViewModel.userSignIn("   ", "validPassword", result -> {
+            callbackResult = result;
+            latch.countDown();
+        });
+        latch.await(5, TimeUnit.SECONDS);
+        assertFalse(callbackResult);
+    }
+
+    @Test
+    public void testAccountLoginWithNullInput() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        mainViewModel.userSignIn(null, "validPassword", result -> {
+            callbackResult = result;
+            latch.countDown();
+        });
+        latch.await(5, TimeUnit.SECONDS);
+        assertFalse(callbackResult);
+    }
+
+    @Test
+    public void testAccountLoginWithEmptyStringInput() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        mainViewModel.userSignIn("", "validPassword", result -> {
+            callbackResult = result;
+            latch.countDown();
+        });
+        latch.await(5, TimeUnit.SECONDS);
+        assertFalse(callbackResult);
+    }
+
 
 
 
