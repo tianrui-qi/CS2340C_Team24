@@ -115,23 +115,23 @@ public class HomeDes extends AppCompatActivity {
                                 startDate.setText("");
                                 endDate.setText("");
                                 duration.setText("");
-                                mainViewModel.calVacation(
-                                        occupiedDays -> {
-                                            // Update the result view with the occupied days
-                                            if (occupiedDays != null) {
-                                                resultView.setText(getString(
-                                                        R.string.HomeDestination_Calculate_Message, occupiedDays
-                                                ));
-                                            } else {
-                                                resultView.setText(R.string.HomeDestination_Calculate_Error);
-                                            }
-                                        }
-                                );
+                                mainViewModel.calVacation(occupiedDays -> {
+                                    // Update the result view with the occupied days
+                                    if (occupiedDays != null) {
+                                        resultView.setText(getString(
+                                                R.string.HomeDestination_Calculate_Message,
+                                                occupiedDays
+                                        ));
+                                    } else {
+                                        resultView.setText(
+                                                R.string.HomeDestination_Calculate_Error
+                                        );
+                                    }
+                                });
                                 formCalculate.setVisibility(View.GONE);
                                 resultCalculate.setVisibility(View.VISIBLE);
                             }
-                        }
-                )
+                        })
         );
     }
 
