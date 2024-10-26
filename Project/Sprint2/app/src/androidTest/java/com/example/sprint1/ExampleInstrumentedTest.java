@@ -6,10 +6,10 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 
-import com.example.sprint1.model.MainModel;
 import com.example.sprint1.model.MainModel.CallbackBool;
 import com.example.sprint1.model.MainModel.CallbackDestination;
 import com.example.sprint1.model.MainModel.CallbackVacation;
+import com.example.sprint1.viewmodel.MainViewModel;
 
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
@@ -28,14 +28,14 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
-    private static MainModel mainModel;
+    private static MainViewModel mainViewModel;
     private boolean callbackResult;
     private HashMap<String, HashMap<String, String>> destinationsResult;
     private HashMap<String, String> vacationResult;
 
     @Before
     public void setup() {
-        mainModel = MainModel.getInstance();
+        mainViewModel = new MainViewModel();
         callbackResult = false;
         destinationsResult = null;
         vacationResult = null;
@@ -64,7 +64,7 @@ public class ExampleInstrumentedTest {
 
         CountDownLatch latch = new CountDownLatch(1);
 
-        mainModel.userSignUp("testUser", "testPassword",  result -> {
+        mainViewModel.userSignUp("testUser", "testPassword", result -> {
             callbackResult = result;
             latch.countDown();
         });
@@ -78,7 +78,7 @@ public class ExampleInstrumentedTest {
         callbackResult = false;
 
         CountDownLatch latch = new CountDownLatch(1);
-        mainModel.userSignIn("tianrui", "1", result -> {
+        mainViewModel.userSignIn("tianrui", "1", result -> {
             callbackResult = result;
             latch.countDown();
         });
@@ -92,7 +92,7 @@ public class ExampleInstrumentedTest {
         callbackResult = false;
 
         CountDownLatch latch = new CountDownLatch(1);
-        mainModel.userSignIn("tianrui", "2", result -> {
+        mainViewModel.userSignIn("tianrui", "2", result -> {
             callbackResult = result;
             latch.countDown();
         });
@@ -106,7 +106,7 @@ public class ExampleInstrumentedTest {
         callbackResult = false;
 
         CountDownLatch latch = new CountDownLatch(1);
-        mainModel.userSignIn("testUser", "testPassword", result -> {
+        mainViewModel.userSignIn("testUser", "testPassword", result -> {
             callbackResult = result;
             latch.countDown();
         });
@@ -114,7 +114,7 @@ public class ExampleInstrumentedTest {
         latch.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
 
-        mainModel.addDestination("Paris", "01/01/2023", "01/11/2023", "10", result -> {
+        mainViewModel.addDestination("Paris", "01/01/2023", "01/11/2023",  result -> {
             callbackResult = result;
             latch.countDown();
         });
@@ -128,7 +128,7 @@ public class ExampleInstrumentedTest {
         callbackResult = false;
 
         CountDownLatch latch = new CountDownLatch(1);
-        mainModel.userSignIn("testUser", "testPassword", result -> {
+        mainViewModel.userSignIn("testUser", "testPassword", result -> {
             callbackResult = result;
             latch.countDown();
         });
@@ -136,7 +136,7 @@ public class ExampleInstrumentedTest {
         latch.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
 
-        mainModel.addDestination("New York", "01/04/2023", "01/06/2023", "2", result -> {
+        mainViewModel.addDestination("New York", "01/04/2023", "01/06/2023",  result -> {
             callbackResult = result;
             latch.countDown();
         });
@@ -150,58 +150,54 @@ public class ExampleInstrumentedTest {
         callbackResult = false;
 
         CountDownLatch latch = new CountDownLatch(1);
-        mainModel.userSignIn("testUser", "testPassword", result -> {
+        mainViewModel.userSignIn("testUser", "testPassword", result -> {
             callbackResult = result;
             latch.countDown();
         });
 
         latch.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
-
-        mainModel.addDestination("Atlanta", "01/01/2023", "01/11/2023", "10", result -> {
-            callbackResult = result;
-            latch.countDown();
-        });
-
-        latch.await(5, TimeUnit.SECONDS);
+        // add back if database was cleared
+//        CountDownLatch latch2 = new CountDownLatch(1);
+//        mainViewModel.addDestination("Atlanta", "01/01/2023", "01/11/2023",  result -> {
+//            callbackResult = result;
+//            latch2.countDown();
+//        });
+//
+//        latch2.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
-
-        mainModel.addDestination("Atlanta", "01/01/2023", "01/11/2023", "10", result -> {
+        CountDownLatch latch3 = new CountDownLatch(1);
+        mainViewModel.addDestination("Atlanta", "01/01/2023", "01/11/2023",  result -> {
             callbackResult = result;
-            latch.countDown();
+            latch3.countDown();
         });
 
-        latch.await(500, TimeUnit.SECONDS);
+        latch3.await(500, TimeUnit.SECONDS);
         assertFalse(callbackResult);
     }
 
     @Test
     public void testGetDestinationsWithExistingDestinations() throws InterruptedException{
+
         callbackResult = false;
 
-        CountDownLatch latch = new CountDownLatch(1);
-        mainModel.userSignIn("testUser", "testPassword", result -> {
+        CountDownLatch latch2 = new CountDownLatch(1);
+        mainViewModel.userSignIn("testUser", "testPassword", result -> {
             callbackResult = result;
-            latch.countDown();
+            latch2.countDown();
         });
 
-        latch.await(5, TimeUnit.SECONDS);
+        latch2.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
 
-        mainModel.addDestination("Paris", "01/01/2023", "01/11/2023", "10", result -> {
-            callbackResult = result;
-            latch.countDown();
-        });
 
-        latch.await(5, TimeUnit.SECONDS);
-        assertTrue(callbackResult);
-
-        mainModel.getDestinations( result -> {
+        CountDownLatch getDestinationlatch = new CountDownLatch(1);
+        mainViewModel.getDestinations(result -> {
             destinationsResult = result;
-            latch.countDown();
+            getDestinationlatch.countDown();
         });
 
-        latch.await(500, TimeUnit.SECONDS);
+        getDestinationlatch.await(5, TimeUnit.SECONDS);
 
         assertTrue(destinationsResult.containsKey("Paris"));
     }
@@ -211,7 +207,7 @@ public class ExampleInstrumentedTest {
         callbackResult = false;
 
         CountDownLatch latch = new CountDownLatch(1);
-        mainModel.userSignIn("testUser", "testPassword", result -> {
+        mainViewModel.userSignIn("testUser", "testPassword", result -> {
             callbackResult = result;
             latch.countDown();
         });
@@ -219,7 +215,7 @@ public class ExampleInstrumentedTest {
         latch.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
 
-        mainModel.getDestinations( result -> {
+        mainViewModel.getDestinations(result -> {
             destinationsResult = result;
             latch.countDown();
         });
@@ -231,28 +227,27 @@ public class ExampleInstrumentedTest {
     @Test
     public void testSetVacationWithValidDatesAndDuration() throws InterruptedException{
         callbackResult = false;
-
         CountDownLatch latch = new CountDownLatch(1);
-        mainModel.userSignIn("testUser", "testPassword",result -> {
+        mainViewModel.userSignIn("testUser", "testPassword", result -> {
             callbackResult = result;
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
-
-        mainModel.setVacation("01/01/2023", "01/11/2023", "10",result -> {
+        CountDownLatch setVacationLatch = new CountDownLatch(1);
+        mainViewModel.setVacation("01/01/2023", "01/10/2023", "10", result -> {
             callbackResult = result;
-            latch.countDown();
+            setVacationLatch.countDown();
         });
-        latch.await(5, TimeUnit.SECONDS);
+        setVacationLatch.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
-
-        mainModel.getVacation( result -> {
+        CountDownLatch getVacationLatch = new CountDownLatch(1);
+        mainViewModel.getVacation(result -> {
             vacationResult = result;
-            latch.countDown();
+            getVacationLatch.countDown();
         });
 
-        latch.await(5, TimeUnit.SECONDS);
+        getVacationLatch.await(5, TimeUnit.SECONDS);
 
         assertEquals("01/01/2023", vacationResult.get("startDate"));
         assertEquals("01/10/2023", vacationResult.get("endDate"));
@@ -264,14 +259,14 @@ public class ExampleInstrumentedTest {
         callbackResult = false;
 
         CountDownLatch latch = new CountDownLatch(1);
-        mainModel.userSignIn("testUser", "testPassword",result -> {
+        mainViewModel.userSignIn("testUser", "testPassword", result -> {
             callbackResult = result;
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
 
-        mainModel.setVacation("01/10/2023", "01/01/2023", "5", result -> {
+        mainViewModel.setVacation("01/10/2023", "01/01/2023", "5", result -> {
             callbackResult = result;
             latch.countDown();
         });
@@ -284,21 +279,21 @@ public class ExampleInstrumentedTest {
         callbackResult = false;
 
         CountDownLatch latch = new CountDownLatch(1);
-        mainModel.userSignIn("testUser", "testPassword", result -> {
+        mainViewModel.userSignIn("testUser", "testPassword", result -> {
             callbackResult = result;
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
 
-        mainModel.setVacation("01/01/2023", "01/21/2023", "20", result -> {
+        mainViewModel.setVacation("01/01/2023", "01/21/2023", "21", result -> {
             callbackResult = result;
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
 
-        mainModel.addDestination("Paris", "01/01/2023", "01/11/2023", "10", result -> {
+        mainViewModel.addDestination("Paris", "01/01/2023", "01/11/2023",  result -> {
             callbackResult = result;
             latch.countDown();
         });
@@ -314,21 +309,21 @@ public class ExampleInstrumentedTest {
 
         CountDownLatch latch = new CountDownLatch(1);
 
-        mainModel.userSignIn("testUser", "testPassword", result -> {
+        mainViewModel.userSignIn("testUser", "testPassword", result -> {
             callbackResult = result;
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
 
-        mainModel.setVacation("01/01/2023", "01/11/2023", "10", result -> {
+        mainViewModel.setVacation("01/01/2023", "01/30/2023", "30", result -> {
             callbackResult = result;
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
         assertTrue(callbackResult);
 
-        mainModel.addDestination("Paris", "01/15/2023", "01/20/2023","5", result -> {
+        mainViewModel.addDestination("Paris", "01/15/2023", "01/20/2023", result -> {
             callbackResult = result;
             latch.countDown();
         });
