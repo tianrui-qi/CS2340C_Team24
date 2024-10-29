@@ -29,12 +29,17 @@ public class Order {
         String message = "Thank you for your order, " + customerName + "!\n\n" +
                 "Your order details:\n";
         for (Item item : items) {
-            message += item.getName() + " - " + item.getPrice() + "\n";
+            message += item.toString() + "\n";
         }
         message += "Total: " + calculateTotalPrice();
-        EmailSender.sendEmail(customerEmail, "Order Confirmation", message);
+        this.sendEmail("Order Confirmation", message);
     }
 
+    private void sendEmail(String subject, String message){
+        System.out.println("Email to: " + this.customerEmail);
+        System.out.println("Subject: " + subject);
+        System.out.println("Body: " + message);
+    }
 
     public void addItem(Item item) {
         items.add(item);
@@ -79,18 +84,9 @@ public class Order {
         return has_gift_card;
     }
 
-   public void printOrder() {
-        System.out.println("Order Details:");
-        for (Item item : items) {
-            System.out.println(item.getName() + " - " + item.getPrice());
-        }
-   }
-
-   public void addItemsFromAnotherOrder(Order otherOrder) {
+    public void addItemsFromAnotherOrder(Order otherOrder) {
         for (Item item : otherOrder.getItems()) {
             items.add(item);
         }
-   }
-
+    }
 }
-

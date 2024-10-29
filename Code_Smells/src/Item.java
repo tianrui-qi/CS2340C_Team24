@@ -32,13 +32,8 @@ class Item {
         return final_price * this.quantity;
     }
 
-    // getter and setter
-
-    public String getName() {
-        return name;
-    }
-
-    public double getPrice() {
-        return price;
+    @Override
+    public String toString() {
+        return this.name + " - " + this.price;
     }
 }
