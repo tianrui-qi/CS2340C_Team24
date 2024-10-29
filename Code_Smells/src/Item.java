@@ -5,6 +5,8 @@ class Item {
     private DiscountType discountType;
     private double discountAmount;
 
+    // constructor
+
     public Item(String name, double price, int quantity, DiscountType discountType, double discountAmount) {
         this.name = name;
         this.price = price;
@@ -12,6 +14,25 @@ class Item {
         this.discountType = discountType;
         this.discountAmount = discountAmount;
     }
+
+    // methods
+
+    public double calculatePrice() {
+        double final_price = this.getPrice();
+        switch (this.getDiscountType()) {
+            case PERCENTAGE:
+                final_price -= this.getDiscountAmount() * this.getPrice();
+                break;
+            case AMOUNT:
+                final_price -= this.getDiscountAmount();
+                break;
+            default:
+                break;
+        }
+        return final_price * this.getQuantity();
+    }
+
+    // getter and setter
 
     public String getName() {
         return name;
