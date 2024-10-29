@@ -14,24 +14,7 @@ public class Order {
     public double calculateTotalPrice() {
     	double total = 0.0;
     	for (Item item : items) {
-        	double price = item.getPrice();
-        	switch (item.getDiscountType()) {
-            	case PERCENTAGE:
-                	price -= item.getDiscountAmount() * price;
-                	break;
-            	case AMOUNT:
-                	price -= item.getDiscountAmount();
-                	break;
-            	default:
-                	// no discount
-                	break;
-        	}
-        	total += price * item.getQuantity();
-       	    if (item instanceof TaxableItem) {
-                TaxableItem taxableItem = (TaxableItem) item;
-                double tax = taxableItem.getTaxRate() / 100.0 * item.getPrice();
-                total += tax;
-            }
+        	total += calculatePrice(item);
         }
     	if (hasGiftCard()) {
         	total -= 10.0; // subtract $10 for gift card
@@ -40,6 +23,28 @@ public class Order {
         	total *= 0.9; // apply 10% discount for orders over $100
     	}
     	return total;
+    }
+
+    private double calculatePrice(Item item) {
+        double price = item.getPrice();
+        switch (item.getDiscountType()) {
+            case PERCENTAGE:
+                price -= item.getDiscountAmount() * price;
+                break;
+            case AMOUNT:
+                price -= item.getDiscountAmount();
+                break;
+            default:
+                // no discount
+                break;
+        }
+        price = price * item.getQuantity();
+        if (item instanceof TaxableItem) {
+            TaxableItem taxableItem = (TaxableItem) item;
+            double tax = taxableItem.getTaxRate() / 100.0 * item.getPrice();
+            price += tax;
+        }
+        return price;
     }
 
     public void sendConfirmationEmail() {
