@@ -12,15 +12,11 @@ public class TaxableItem extends Item {
     @Override
     public double calculatePrice() {
         double final_price = super.calculatePrice();
-        double tax = this.getTaxRate() / 100.0 * this.getPrice();
+        double tax = this.taxRate / 100.0 * this.price;
         return final_price + tax;
     }
 
     // getter and setter
-
-    public double getTaxRate(){
-        return taxRate;
-    }
 
     public void setTaxRate(double rate) {
         if(rate>=0){
