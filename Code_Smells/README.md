@@ -20,7 +20,7 @@ public double calculateTotalPrice() {
     for (Item item : items) {
         // logic to calculate price of a single item
     }
-    // ... logic applying on total price
+    // logic applying on total price
     return total;
 }
 ```
@@ -39,7 +39,7 @@ public double calculateTotalPrice() {
     for (Item item : items) {
         total += calculatePrice(item);
     }
-    // ... logic applying on total price
+    // logic applying on total price
     return total;
 }
 ```
@@ -94,10 +94,16 @@ public double calculateTotalPrice() {
     for (Item item : items) {
         total += item.calculatePrice();
     }
-    // ... logic applying on total price
+    // logic applying on total price
     return total;
 }
 ```
+
+### Unnecessary getter in `Item` and subclasses
+
+Since we move logic to calculate price into the item class itself, we no longer
+need getter for quantity, discount type, and discount amount in `Item` and tax rate in `TaxableItem`.
+We can remove these unnecessary getters and directly access these attributes insde the method of the class. 
 
 ## Contributors
 
