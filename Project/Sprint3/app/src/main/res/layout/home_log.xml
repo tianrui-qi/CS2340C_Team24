@@ -1,0 +1,100 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.HomeLog">
+
+    <TextView
+        android:id="@+id/Home_Log_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="@string/Home_Log_Title"
+        android:textColor="@color/black"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".view.Welcome" />
+
+    <Button
+        android:id="@+id/Home_Log_Visualization"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Home_Log_Visualization"
+        app:layout_constraintTop_toBottomOf="@id/Home_Log_Title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pie_chart"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/Home_Log_Visualization"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/NavigationBar"
+        android:layout_width="411dp"
+        android:layout_height="85dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/view_log_button_log"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:backgroundTint="#FDF6FE"
+            android:src="@drawable/logistic_fill"
+            android:importantForAccessibility="no" />
+
+        <ImageButton
+            android:id="@+id/view_log_button_des"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FDF6FE"
+            android:src="@drawable/destination"
+            android:importantForAccessibility="no" />
+
+        <ImageButton
+            android:id="@+id/view_log_button_din"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FDF6FE"
+            android:src="@drawable/dining"
+            android:importantForAccessibility="no" />
+
+        <ImageButton
+            android:id="@+id/view_log_button_acc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FDF6FE"
+            android:src="@drawable/accomodations_fill"
+            android:importantForAccessibility="no" />
+
+        <ImageButton
+            android:id="@+id/view_log_button_tra"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FDF6FE"
+            android:src="@drawable/travelcommunity"
+            android:importantForAccessibility="no" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

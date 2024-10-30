@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Sprint1</string>
+    <string name="action_settings">Settings</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <!--  welcome  -->
+    <string name="Welcome_Title">Welcome to</string>
+    <string name="Welcome_Name">WanderSync!</string>
+    <!--  home_log  -->
+    <string name="Home_Log_Title">Logistics</string>
+    <string name="Home_Log_Visualization">Visualization</string>
+    <!--  home_des  -->
+    <string name="Home_Des_Title">Destination</string>
+    <string name="Home_Des_LogTravel">Log Travel</string>
+    <string name="Home_Des_LogTravel_TravelLocation">Travel Location</string>
+    <string name="Home_Des_LogTravel_StartDate">Estimated Start (MM/DD/YYYY)</string>
+    <string name="Home_Des_LogTravel_EndDate">Estimated End (MM/DD/YYYY)</string>
+    <string name="Home_Des_LogTravel_Cancel">Cancel</string>
+    <string name="Home_Des_LogTravel_Submit">Submit</string>
+    <string name="Home_Des_Calculate">Calculate Vacation Time</string>
+    <string name="Home_Des_Calculate_StartDate">Start Date (MM/DD/YYYY)</string>
+    <string name="Home_Des_Calculate_EndDate">End Date (MM/DD/YYYY)</string>
+    <string name="Home_Des_Calculate_Duration">Duration</string>
+    <string name="Home_Des_Calculate_Button">Calculate</string>
+    <string name="HomeDestination_Calculate_Message">Vacation Days Occupied: %1$s</string>
+    <string name="HomeDestination_Calculate_Error">Failed to calculate occupied days.</string>
+    <string name="HomeDestination_Calculate_Back">Back</string>
+    <string name="Home_Des_ListDes_Empty">No travel records found.</string>
+    <!--  home_din  -->
+    <string name="Home_Din_Title">Dining Establishments</string>
+    <!--  home_acc  -->
+    <string name="Home_Acc_Title">Accommodations</string>
+    <!--  home_tra  -->
+    <string name="Home_Tra_Title">Travel Community</string>
+
+
+    <string name="User_SignIn_Title">Log In</string>
+    <string name="create_login">Log In</string>
+    <string name="create_acc">Create an Account</string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="start">Start</string>
+    <string name="quit">Quit</string>
+</resources>
