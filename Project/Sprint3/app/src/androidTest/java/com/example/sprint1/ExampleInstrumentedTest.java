@@ -136,14 +136,14 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void testCalculateOccupiedDaysWithNoOverlap() throws InterruptedException {
+    public void testCalculateOccupiedDaysWithNoOverlap() {
         CountDownLatch latch = new CountDownLatch(1);
         mainViewModel.userSignIn("testUser", "testPassword", signInResult -> {
-            assertTrue("User sign-in failed", signInResult);
+            assertTrue(signInResult);
             mainViewModel.setVacation("01/01/2023", "01/30/2023", "30", setResult -> {
-                assertTrue("Setting vacation failed", setResult);
+                assertTrue(setResult);
                 mainViewModel.addDestination("Paris", "02/15/2023", "02/20/2023", addResult -> {
-                    assertTrue("Adding destination failed", addResult);
+                    assertTrue(addResult);
                     mainViewModel.calVacation(occupiedDays -> {
                         assertEquals("0", occupiedDays);
                         latch.countDown();
