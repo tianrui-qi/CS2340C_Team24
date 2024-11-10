@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -16,7 +17,6 @@ public class DestDatabase {
     /* Instance fields */
 
     private final DatabaseReference destDatabase;
-    private String usernameCurr;
 
     /* Constructors */
 
@@ -24,72 +24,87 @@ public class DestDatabase {
         this.destDatabase = FirebaseDatabase.getInstance().getReference("destination");
     }
 
-    /* Main Features */
+    /* Feature 2: Log Travel */
 
     public void addDestination(
             String travelLocation, String startDate, String endDate, String duration,
-            Callback<Boolean> callback
+            Callback<String> callback
     ) {
-        DatabaseReference refer = this.destDatabase.child(this.usernameCurr).child(travelLocation);
-        refer.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    callback.onResult(false);
-                } else {
-                    HashMap<String, String> value = new HashMap<>();
-                    value.put("travelLocation", travelLocation);
-                    value.put("startDate", startDate);
-                    value.put("endDate", endDate);
-                    value.put("duration", duration);
-                    destDatabase.child(usernameCurr).child(travelLocation).setValue(value);
-                    callback.onResult(true);
-                }
-            }
+        String key = this.destDatabase.push().getKey();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callback.onResult(false);
+        if (key == null) {
+            callback.onResult(null);
+            return;
+        }
+
+        HashMap<String, String> value = new HashMap<>();
+        value.put("travelLocation", travelLocation);
+        value.put("startDate", startDate);
+        value.put("endDate", endDate);
+        value.put("duration", duration);
+
+        this.destDatabase.child(key).setValue(value).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callback.onResult(key); // Return the trip ID if successful
+            } else {
+                callback.onResult(null); // Return null if operation fails
             }
         });
     }
 
-    public void getDestinations(
+    public void getDestination(
+            ArrayList<String> keys,
             Callback<HashMap<String, HashMap<String, String>>> callback
     ) {
-        DatabaseReference refer = this.destDatabase.child(this.usernameCurr);
-        refer.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    HashMap<String, HashMap<String, String>> dest = new HashMap<>();
-                    for (DataSnapshot destinationSnapshot : dataSnapshot.getChildren()) {
-                        String travelLocation = destinationSnapshot.getKey();
+        if (keys == null || keys.isEmpty()) {
+            callback.onResult(null);
+            return;
+        }
+
+        HashMap<String, HashMap<String, String>> result = new HashMap<>();
+        int[] pendingRequests = {keys.size()}; // Counter to track pending Firebase requests
+        boolean[] hasFailed = {false}; // To track if any request fails
+
+        for (String destId : keys) {
+            DatabaseReference ref = this.destDatabase.child(destId);
+
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
                         HashMap<String, String> destinationDetails = new HashMap<>();
-                        for (DataSnapshot detailSnapshot : destinationSnapshot.getChildren()) {
+                        for (DataSnapshot detailSnapshot : dataSnapshot.getChildren()) {
                             String key = detailSnapshot.getKey();
                             String value = detailSnapshot.getValue(String.class);
-                            destinationDetails.put(key, value);
+                            if (key != null && value != null) {
+                                destinationDetails.put(key, value);
+                            }
                         }
-                        dest.put(travelLocation, destinationDetails);
+                        // Add the destination details to the result
+                        result.put(destId, destinationDetails);
                     }
-                    callback.onResult(dest);
-                } else {
-                    callback.onResult(null);
+                    synchronized (pendingRequests) {
+                        pendingRequests[0]--;
+                        if (pendingRequests[0] == 0) {
+                            // All requests completed
+                            callback.onResult(hasFailed[0] ? null : result);
+                        }
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callback.onResult(null);
-            }
-        });
-    }
-
-    /* Getters and Setters */
-
-    public void setUsernameCurr(String username) {
-        this.usernameCurr = username;
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    synchronized (pendingRequests) {
+                        pendingRequests[0]--;
+                        hasFailed[0] = true; // Mark failure
+                        if (pendingRequests[0] == 0) {
+                            // All requests completed
+                            callback.onResult(null);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     /* Callbacks */

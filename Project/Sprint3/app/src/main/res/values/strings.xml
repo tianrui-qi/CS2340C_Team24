@@ -12,6 +12,8 @@
     <!--  home_log  -->
     <string name="Home_Log_Title">Logistics</string>
     <string name="Home_Log_Visualization">Visualization</string>
+    <string name="Home_Log_AddNote">Add Note</string>
+    <string name="Home_Log_AddCollaborator">Add Collaborator</string>
     <!--  home_des  -->
     <string name="Home_Des_Title">Destination</string>
     <string name="Home_Des_LogTravel">Log Travel</string>
