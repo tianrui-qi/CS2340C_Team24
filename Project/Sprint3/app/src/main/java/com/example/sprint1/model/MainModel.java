@@ -5,6 +5,13 @@ import java.util.HashMap;
 
 public class MainModel {
 
+    /* Instance fields */
+
+    private final UserDatabase userDatabase = new UserDatabase();
+    private final DestDatabase destDatabase = new DestDatabase();
+    private final DiniDatabase diniDatabase = new DiniDatabase();
+    private final AccoDatabase accoDatabase = new AccoDatabase();
+
     /* Singleton Design */
 
     private static MainModel instance;
@@ -20,12 +27,25 @@ public class MainModel {
         return instance;
     }
 
-    /* Instance fields */
+    /* Observer Methods */
 
-    private final UserDatabase userDatabase = new UserDatabase();
-    private final DestDatabase destDatabase = new DestDatabase();
-    private final DiniDatabase diniDatabase = new DiniDatabase();
-    private final AccoDatabase accoDatabase = new AccoDatabase();
+    private final ArrayList<Observer> observers = new ArrayList<>();
+
+    public void addObserver(Observer observer) {
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    private void notifyObservers(String eventType, Object data) {
+        for (Observer observer : observers) {
+            observer.onUpdate(eventType, data);
+        }
+    }
 
     /* Main Functions */
 
@@ -113,7 +133,12 @@ public class MainModel {
     ) {
         this.diniDatabase.addDining(location, website, time, key -> {
             if (key != null) {
-                this.userDatabase.addDining(key, callback::onResult);
+                this.userDatabase.addDining(key, success -> {
+                    if (success) {
+                        notifyObservers("DiningAdded", key); // Notify observers
+                    }
+                    callback.onResult(success);
+                });
             } else {
                 callback.onResult(false);
             }
@@ -127,7 +152,10 @@ public class MainModel {
             if (keys == null || keys.isEmpty()) {
                 callback.onResult(null);
             } else {
-                this.diniDatabase.getDining(keys, callback::onResult);
+                this.diniDatabase.getDining(keys, data -> {
+                    notifyObservers("DiningFetched", data); // Notify observers
+                    callback.onResult(data);
+                });
             }
         });
     }
@@ -139,7 +167,12 @@ public class MainModel {
         this.accoDatabase.addAccommodation(
                 checkIn, checkOut, location, roomNum, roomType, key -> {
                     if (key != null) {
-                        this.userDatabase.addAccommodation(key, callback::onResult);
+                        this.userDatabase.addAccommodation(key, success -> {
+                            if (success) {
+                                notifyObservers("AccommodationAdded", key); // Notify observers
+                            }
+                            callback.onResult(success);
+                        });
                     } else {
                         callback.onResult(false);
                     }
@@ -154,7 +187,10 @@ public class MainModel {
             if (keys == null || keys.isEmpty()) {
                 callback.onResult(null);
             } else {
-                this.accoDatabase.getAccommodation(keys, callback::onResult);
+                this.accoDatabase.getAccommodation(keys, data -> {
+                    notifyObservers("AccommodationFetched", data); // Notify observers
+                    callback.onResult(data);
+                });
             }
         });
     }

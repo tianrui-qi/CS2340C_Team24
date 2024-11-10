@@ -3,6 +3,7 @@ package com.example.sprint1.viewmodel;
 import androidx.lifecycle.ViewModel;
 
 import com.example.sprint1.model.MainModel;
+import com.example.sprint1.model.Observer;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -15,11 +16,41 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 
-public class MainViewModel extends ViewModel {
+public class MainViewModel extends ViewModel implements Observer {
 
     /* Instance fields */
 
     private final MainModel mainModel = MainModel.getInstance();
+
+    /* Observer Design */
+
+    public MainViewModel() {
+        // Register this ViewModel as an observer to the MainModel
+        mainModel.addObserver(this);
+    }
+
+    @Override
+    public void onUpdate(String eventType, Object data) {
+        // Handle updates from the MainModel
+        switch (eventType) {
+        case "DiningAdded":
+            System.out.println("New dining added: " + data);
+            break;
+        case "AccommodationAdded":
+            System.out.println("New accommodation added: " + data);
+            break;
+        default:
+            System.out.println("Unknown event type: " + eventType);
+            break;
+        }
+    }
+
+    @Override
+    protected void onCleared() {
+        // Clean up the observer when ViewModel is cleared
+        mainModel.removeObserver(this);
+        super.onCleared();
+    }
 
     /* Main Features */
 
