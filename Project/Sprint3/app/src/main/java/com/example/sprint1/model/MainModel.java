@@ -5,11 +5,13 @@ import java.util.HashMap;
 
 public class MainModel {
 
+    /* Singleton Design */
+
     private static MainModel instance;
     private final UserDatabase userDatabase = new UserDatabase();
     private final DestDatabase destDatabase = new DestDatabase();
 
-    /* Singleton Design */
+    /* Instance fields */
 
     private MainModel() {
 
@@ -24,11 +26,17 @@ public class MainModel {
 
     /* Main Features */
 
-    public void userSignUp(String username, String password, CallbackBool callback) {
-        this.userDatabase.userSignUp(username, password, callback);
+    public void userSignUp(
+            String username, String password,
+            Callback<Boolean> callback
+    ) {
+        this.userDatabase.userSignUp(username, password, callback::onResult);
     }
 
-    public void userSignIn(String username, String password, CallbackBool callback) {
+    public void userSignIn(
+            String username, String password,
+            Callback<Boolean> callback
+    ) {
         this.userDatabase.userSignIn(username, password, success -> {
             if (success) {
                 this.destDatabase.setUsernameCurr(this.userDatabase.getUsernameCurr());
@@ -39,35 +47,35 @@ public class MainModel {
 
     public void addDestination(
             String travelLocation, String startDate, String endDate, String duration,
-            CallbackBool callback
+            Callback<Boolean> callback
     ) {
-        this.destDatabase.addDestination(travelLocation, startDate, endDate, duration, callback);
+        this.destDatabase.addDestination(
+                travelLocation, startDate, endDate, duration, callback::onResult
+        );
     }
 
-    public void getDestinations(CallbackDestination callback) {
-        this.destDatabase.getDestinations(callback);
+    public void getDestinations(
+            Callback<HashMap<String, HashMap<String, String>>> callback
+    ) {
+        this.destDatabase.getDestinations(callback::onResult);
     }
 
     public void setVacation(
-            String startDate, String endDate, String duration, CallbackBool callback) {
-        this.userDatabase.setVacation(startDate, endDate, duration, callback);
+            String startDate, String endDate, String duration,
+            Callback<Boolean> callback
+    ) {
+        this.userDatabase.setVacation(startDate, endDate, duration, callback::onResult);
     }
 
-    public void getVacation(CallbackVacation callback) {
-        this.userDatabase.getVacation(callback);
+    public void getVacation(
+            Callback<HashMap<String, String>> callback
+    ) {
+        this.userDatabase.getVacation(callback::onResult);
     }
 
     /* Callbacks */
 
-    public interface CallbackBool {
-        void onResult(boolean callback);
-    }
-
-    public interface CallbackDestination {
-        void onResult(HashMap<String, HashMap<String, String>> callback);
-    }
-
-    public interface CallbackVacation {
-        void onResult(HashMap<String, String> callback);
+    public interface Callback<T> {
+        void onResult(T callback);
     }
 }
