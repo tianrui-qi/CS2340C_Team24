@@ -44,6 +44,19 @@
     <string name="Home_Din_AddDining_Submit">Submit</string>
     <!--  home_acc  -->
     <string name="Home_Acc_Title">Accommodations</string>
+    <string name="Home_Acc_ListAccommodation_Location">Location: </string>
+    <string name="Home_Acc_ListAccommodation_RoomNum">Room Num: </string>
+    <string name="Home_Acc_ListAccommodation_RoomType">Room Type: </string>
+    <string name="Home_Acc_ListAccommodation_CheckIn">Check In: </string>
+    <string name="Home_Acc_ListAccommodation_CheckOut">Check Out: </string>
+    <string name="Home_Acc_AddAccommodation">Add Accommodation</string>
+    <string name="Home_Acc_AddAccommodation_Location">Location</string>
+    <string name="Home_Acc_AddAccommodation_RoomNum">Room Number</string>
+    <string name="Home_Acc_AddAccommodation_RoomType">Room Type</string>
+    <string name="Home_Acc_AddAccommodation_CheckIn">Check In (MM/DD/YYYY)</string>
+    <string name="Home_Acc_AddAccommodation_CheckOut">Check Out (MM/DD/YYYY)</string>
+    <string name="Home_Acc_AddAccommodation_Cancel">Cancel</string>
+    <string name="Home_Acc_AddAccommodation_Submit">Submit</string>
     <!--  home_tra  -->
     <string name="Home_Tra_Title">Travel Community</string>
 

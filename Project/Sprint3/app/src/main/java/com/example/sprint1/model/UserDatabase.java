@@ -161,7 +161,7 @@ public class UserDatabase {
             usersToUpdate.add(this.usernameCurr);
 
             // Track total updates (collaborators + destination copy)
-            int[] pendingUpdates = {usersToUpdate.size() + 2};
+            int[] pendingUpdates = {usersToUpdate.size() + 3};
             boolean[] hasFailed = {false};
 
             // Update "destination" for the new collaborator
@@ -184,6 +184,22 @@ public class UserDatabase {
             this.getDining(dining -> {
                 DatabaseReference diningRef = this.userDatabase.child(username).child("dining");
                 diningRef.setValue(dining).addOnCompleteListener(task -> {
+                    synchronized (pendingUpdates) {
+                        if (!task.isSuccessful()) {
+                            hasFailed[0] = true;
+                        }
+                        pendingUpdates[0]--;
+                        if (pendingUpdates[0] == 0) {
+                            callback.onResult(!hasFailed[0]);
+                        }
+                    }
+                });
+            });
+
+            // Update "accommodation" for the new collaborator
+            this.getAccommodation(accommodation -> {
+                DatabaseReference ref = this.userDatabase.child(username).child("accommodation");
+                ref.setValue(accommodation).addOnCompleteListener(task -> {
                     synchronized (pendingUpdates) {
                         if (!task.isSuccessful()) {
                             hasFailed[0] = true;
@@ -534,6 +550,111 @@ public class UserDatabase {
                     }
                 }
                 callback.onResult(diningList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onResult(null);
+            }
+        });
+    }
+
+    public void addAccommodation(
+            String key,
+            Callback<Boolean> callback
+    ) {
+        this.getCollaborator(collaborator -> {
+            // Prepare a list of users to update
+            ArrayList<String> usersToUpdate;
+            if (collaborator == null) {
+                usersToUpdate = new ArrayList<>();
+            } else {
+                usersToUpdate = new ArrayList<>(collaborator);
+            }
+            usersToUpdate.add(this.usernameCurr);
+
+            // Update accommodation list for all users in the list
+            int[] pendingUpdates = {usersToUpdate.size()};
+            boolean[] hasFailed = {false};
+            for (String username : usersToUpdate) {
+                addAccommodation(key, username, success -> {
+                    synchronized (pendingUpdates) {
+                        if (!success) {
+                            hasFailed[0] = true; // Mark as failed if any update fails
+                        }
+                        pendingUpdates[0]--;
+                        // If all updates are done
+                        if (pendingUpdates[0] == 0) {
+                            callback.onResult(!hasFailed[0]); // Success if no failures occurred
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void addAccommodation(
+            String key, String username,
+            Callback<Boolean> callback
+    ) {
+        DatabaseReference ref = this.userDatabase.child(username).child("accommodation");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> value = new ArrayList<>();
+
+                if (dataSnapshot.exists()) {
+                    // Parse the raw data into a list
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        String accoKey = child.getValue(String.class);
+                        if (accoKey != null) {
+                            value.add(accoKey);
+                        }
+                    }
+                }
+
+                // Check if the key is already in the list
+                if (!value.contains(key)) {
+                    value.add(key); // Add the new key if it's not already in the list
+                }
+
+                // Update the accommodations list in Firebase
+                ref.setValue(value).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onResult(true); // Success
+                    } else {
+                        callback.onResult(false); // Failure
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onResult(false);
+            }
+        });
+    }
+
+    public void getAccommodation(
+            Callback<ArrayList<String>> callback
+    ) {
+        DatabaseReference ref = this.userDatabase.child(this.usernameCurr).child("accommodation");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    callback.onResult(null);
+                    return;
+                }
+
+                ArrayList<String> accoList = new ArrayList<>();
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    String accoId = child.getValue(String.class);
+                    if (accoId != null) {
+                        accoList.add(accoId);
+                    }
+                }
+                callback.onResult(accoList);
             }
 
             @Override

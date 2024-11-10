@@ -297,6 +297,76 @@ public class MainViewModel extends ViewModel {
         this.mainModel.getDining(callback::onResult);
     }
 
+    public void addAccommodation(
+            String location, String roomNum, String roomType, String checkIn, String checkOut,
+            Callback<Boolean> callback
+    ) {
+        // Check for null or empty inputs
+        if (
+                checkIn == null || checkIn.trim().isEmpty()
+                        || checkOut == null || checkOut.trim().isEmpty()
+                        || location == null || location.trim().isEmpty()
+                        || roomNum == null || roomNum.trim().isEmpty()
+                        || roomType == null || roomType.trim().isEmpty()
+        ) {
+            callback.onResult(false);
+            return;
+        }
+
+        try {
+            // Check if check-in and check-out times are valid
+            DateFormat dateFormat = DateFormat.getDateInstance(
+                    DateFormat.SHORT, java.util.Locale.US
+            );
+            dateFormat.setLenient(false);
+            Date checkInDate = dateFormat.parse(checkIn);
+            Date checkOutDate = dateFormat.parse(checkOut);
+
+            if (checkInDate == null || checkOutDate == null || !checkOutDate.after(checkInDate)) {
+                callback.onResult(false); // Invalid date range
+                return;
+            }
+
+            // Calculate the stay duration
+            int durationInDays = MainViewModel.calDuration(checkInDate, checkOutDate);
+            if (durationInDays < 1) {
+                callback.onResult(false); // Stay duration must be at least 1 day
+                return;
+            }
+        } catch (ParseException e) {
+            callback.onResult(false); // Invalid date format
+            return;
+        }
+
+        // Check for duplicates using existing accommodation records
+        this.mainModel.getAccommodation(existingAccommodations -> {
+            if (existingAccommodations != null) {
+                for (HashMap<String, String> accommodation : existingAccommodations.values()) {
+                    if (checkIn.equals(accommodation.get("checkIn"))
+                            && checkOut.equals(accommodation.get("checkOut"))
+                            && location.equals(accommodation.get("location"))
+                            && roomNum.equals(accommodation.get("roomNum"))
+                            && roomType.equals(accommodation.get("roomType"))) {
+                        // Duplicate found
+                        callback.onResult(false);
+                        return;
+                    }
+                }
+            }
+
+            // If no duplicates, proceed to add the accommodation record
+            this.mainModel.addAccommodation(
+                    checkIn, checkOut, location, roomNum, roomType, callback::onResult
+            );
+        });
+    }
+
+    public void getAccommodation(
+            Callback<HashMap<String, HashMap<String, String>>> callback
+    ) {
+        this.mainModel.getAccommodation(callback::onResult);
+    }
+
     /* Helper Methods */
 
     private static int calDuration(Date startDate, Date endDate) {

@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.sprint1.R;
 import com.example.sprint1.viewmodel.MainViewModel;
@@ -51,15 +52,31 @@ public class HomeDin extends AppCompatActivity {
             }
 
             // Prepare a list of dining data with time parsing
-            List<Map.Entry<String, HashMap<String, String>>> sortedDiningList = new ArrayList<>(diningData.entrySet());
+            List<Map.Entry<String, HashMap<String, String>>> sortedDiningList;
+            sortedDiningList = new ArrayList<>(diningData.entrySet());
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
             // Sort dining records by time
             sortedDiningList.sort((entry1, entry2) -> {
+                String time1 = entry1.getValue() != null ? entry1.getValue().get("time") : null;
+                String time2 = entry2.getValue() != null ? entry2.getValue().get("time") : null;
+
+                if ((time1 == null || time1.isEmpty()) && (time2 == null || time2.isEmpty())) {
+                    return 0;
+                }
+                if (time1 == null || time1.isEmpty()) {
+                    return 1; // Treat null or empty as greater to sort it last
+                }
+                if (time2 == null || time2.isEmpty()) {
+                    return -1; // Treat null or empty as greater to sort it last
+                }
+
                 try {
-                    Date date1 = dateFormat.parse(entry1.getValue().getOrDefault("time", ""));
-                    Date date2 = dateFormat.parse(entry2.getValue().getOrDefault("time", ""));
-                    if (date1 == null || date2 == null) return 0;
+                    Date date1 = dateFormat.parse(time1);
+                    Date date2 = dateFormat.parse(time2);
+                    if (date1 == null || date2 == null) {
+                        return 0;
+                    }
                     return date1.compareTo(date2);
                 } catch (ParseException e) {
                     return 0;
@@ -74,32 +91,51 @@ public class HomeDin extends AppCompatActivity {
                 HashMap<String, String> diningInfo = entry.getValue();
 
                 // Parse the time for comparison
-                Date reservationDate;
-                try {
-                    reservationDate = dateFormat.parse(diningInfo.get("time"));
-                } catch (ParseException e) {
-                    reservationDate = null;
+                Date reservationDate = null;
+                String timeString = diningInfo.get("time");
+
+                if (timeString != null && !timeString.isEmpty()) {
+                    try {
+                        reservationDate = dateFormat.parse(timeString);
+                    } catch (ParseException ignored) { }
                 }
 
                 // Inflate the dining card layout
-                View diningCard = getLayoutInflater().inflate(R.layout.home_din_card, diningContainer, false);
+                View diningCard = getLayoutInflater()
+                        .inflate(R.layout.home_din_card, diningContainer, false);
 
                 // Set dining details
                 TextView locationText = diningCard.findViewById(R.id.Home_Din_ListDining_Location);
                 TextView websiteText = diningCard.findViewById(R.id.Home_Din_ListDining_Website);
                 TextView timeText = diningCard.findViewById(R.id.Home_Din_ListDining_Time);
 
-                locationText.setText(getString(R.string.Home_Din_ListDining_Location) + " " + diningInfo.get("location"));
-                websiteText.setText(getString(R.string.Home_Din_ListDining_Website) + " " + diningInfo.get("website"));
-                timeText.setText(getString(R.string.Home_Din_ListDining_Time) + " " + diningInfo.get("time"));
+                locationText.setText(String.format(
+                        "%s %s", getString(R.string.Home_Din_ListDining_Location),
+                        diningInfo.getOrDefault("location", "")
+                ));
+                websiteText.setText(String.format(
+                        "%s %s", getString(R.string.Home_Din_ListDining_Website),
+                        diningInfo.getOrDefault("website", "")
+                ));
+                timeText.setText(String.format(
+                        "%s %s", getString(R.string.Home_Din_ListDining_Time),
+                        diningInfo.getOrDefault("time", "")
+                ));
 
-                // Change the color of the time text based on whether the reservation is in the past or future
-                if (reservationDate != null && reservationDate.before(currentDate)) {
-                    // Past reservation: red text
-                    timeText.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
-                } else {
-                    // Upcoming reservation: green text
-                    timeText.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+                // Change the color of the time text based on whether the reservation is
+                // in the past or future
+                if (reservationDate != null) {
+                    if (reservationDate.before(currentDate)) {
+                        // Past reservation: red text
+                        timeText.setTextColor(
+                                ContextCompat.getColor(this, android.R.color.holo_red_dark)
+                        );
+                    } else {
+                        // Upcoming reservation: green text
+                        timeText.setTextColor(
+                                ContextCompat.getColor(this, android.R.color.holo_green_dark)
+                        );
+                    }
                 }
 
                 // Add the card to the container
@@ -118,9 +154,9 @@ public class HomeDin extends AppCompatActivity {
 
         addDiningButton.setOnClickListener(v -> {
             if (addDiningForm.getVisibility() == View.GONE) {
-                addDiningForm.setVisibility(View.VISIBLE); // 显示表单
+                addDiningForm.setVisibility(View.VISIBLE);
             } else {
-                addDiningForm.setVisibility(View.GONE); // 隐藏表单并清空输入
+                addDiningForm.setVisibility(View.GONE);
                 inputLocation.setText("");
                 inputWebsite.setText("");
                 inputTime.setText("");
@@ -128,7 +164,7 @@ public class HomeDin extends AppCompatActivity {
         });
 
         findViewById(R.id.Home_Din_AddDining_Cancel).setOnClickListener(v -> {
-            addDiningForm.setVisibility(View.GONE); // 隐藏表单并清空输入
+            addDiningForm.setVisibility(View.GONE);
             inputLocation.setText("");
             inputWebsite.setText("");
             inputTime.setText("");
