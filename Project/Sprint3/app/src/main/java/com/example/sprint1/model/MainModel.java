@@ -8,10 +8,6 @@ public class MainModel {
     /* Singleton Design */
 
     private static MainModel instance;
-    private final UserDatabase userDatabase = new UserDatabase();
-    private final DestDatabase destDatabase = new DestDatabase();
-
-    /* Instance fields */
 
     private MainModel() {
 
@@ -24,7 +20,13 @@ public class MainModel {
         return instance;
     }
 
-    /* Feature 1: User Account */
+    /* Instance fields */
+
+    private final UserDatabase userDatabase = new UserDatabase();
+    private final DestDatabase destDatabase = new DestDatabase();
+    private final DiniDatabase diniDatabase = new DiniDatabase();
+
+    /* Main Functions */
 
     public void userSignUp(
             String username, String password,
@@ -40,7 +42,31 @@ public class MainModel {
         this.userDatabase.userSignIn(username, password, callback::onResult);
     }
 
-    /* Feature 2: Log Travel */
+    public void addNote(
+            String note,
+            Callback<Boolean> callback
+    ) {
+        this.userDatabase.addNote(note, callback::onResult);
+    }
+
+    public void getNote(
+            Callback<HashMap<String, String>> callback
+    ) {
+        this.userDatabase.getNote(callback::onResult);
+    }
+
+    public void addCollaborator(
+            String collaborator,
+            Callback<Boolean> callback
+    ) {
+        this.userDatabase.addCollaborator(collaborator, callback::onResult);
+    }
+
+    public void getNonCollaborator(
+            Callback<ArrayList<String>> callback
+    ) {
+        this.userDatabase.getNonCollaborator(callback::onResult);
+    }
 
     public void addDestination(
             String travelLocation, String startDate, String endDate, String duration,
@@ -67,8 +93,6 @@ public class MainModel {
         });
     }
 
-    /* Feature 3: Calculate Vacation Time */
-
     public void setVacation(
             String startDate, String endDate, String duration,
             Callback<Boolean> callback
@@ -82,32 +106,29 @@ public class MainModel {
         this.userDatabase.getVacation(callback::onResult);
     }
 
-    /* Feature 4: Collaboration */
-
-    public void addCollaborator(
-            String collaborator,
+    public void addDining(
+            String location, String website, String time,
             Callback<Boolean> callback
     ) {
-        this.userDatabase.addCollaborator(collaborator, callback::onResult);
+        this.diniDatabase.addDining(location, website, time, key -> {
+            if (key != null) {
+                this.userDatabase.addDining(key, callback::onResult);
+            } else {
+                callback.onResult(false);
+            }
+        });
     }
 
-    public void getNonCollaborator(
-            Callback<ArrayList<String>> callback
+    public void getDining(
+            Callback<HashMap<String, HashMap<String, String>>> callback
     ) {
-        this.userDatabase.getNonCollaborator(callback::onResult);
-    }
-
-    public void addNote(
-            String note,
-            Callback<Boolean> callback
-    ) {
-        this.userDatabase.addNote(note, callback::onResult);
-    }
-
-    public void getNote(
-            Callback<HashMap<String, String>> callback
-    ) {
-        this.userDatabase.getNote(callback::onResult);
+        this.userDatabase.getDining(keys -> {
+            if (keys == null || keys.isEmpty()) {
+                callback.onResult(null);
+            } else {
+                this.diniDatabase.getDining(keys, callback::onResult);
+            }
+        });
     }
 
     /* Callbacks */

@@ -11,48 +11,49 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-public class DestDatabase {
+public class DiniDatabase {
 
     /* Instance fields */
 
-    private final DatabaseReference destDatabase;
+    private final DatabaseReference diniDatabase;
 
     /* Constructors */
 
-    public DestDatabase() {
-        this.destDatabase = FirebaseDatabase.getInstance().getReference("destination");
+    public DiniDatabase() {
+        this.diniDatabase = FirebaseDatabase.getInstance().getReference("dining");
     }
 
     /* Main Features */
 
-    public void addDestination(
-            String travelLocation, String startDate, String endDate, String duration,
+    public void addDining(
+            String location, String website, String time,
             Callback<String> callback
     ) {
-        String key = this.destDatabase.push().getKey();
+        // Generate a unique key for the dining reservation
+        String key = this.diniDatabase.push().getKey();
 
         if (key == null) {
             callback.onResult(null);
             return;
         }
 
+        // Create a HashMap to store the dining details
         HashMap<String, String> value = new HashMap<>();
-        value.put("travelLocation", travelLocation);
-        value.put("startDate", startDate);
-        value.put("endDate", endDate);
-        value.put("duration", duration);
+        value.put("location", location);
+        value.put("website", website);
+        value.put("time", time);
 
-        this.destDatabase.child(key).setValue(value).addOnCompleteListener(task -> {
+        // Save the dining data to Firebase
+        this.diniDatabase.child(key).setValue(value).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                callback.onResult(key); // Return the trip ID if successful
+                callback.onResult(key); // Return the dining ID if successful
             } else {
                 callback.onResult(null); // Return null if operation fails
             }
         });
     }
 
-    public void getDestination(
+    public void getDining(
             ArrayList<String> keys,
             Callback<HashMap<String, HashMap<String, String>>> callback
     ) {
@@ -65,23 +66,23 @@ public class DestDatabase {
         int[] pendingRequests = {keys.size()}; // Counter to track pending Firebase requests
         boolean[] hasFailed = {false}; // To track if any request fails
 
-        for (String destId : keys) {
-            DatabaseReference ref = this.destDatabase.child(destId);
+        for (String diningId : keys) {
+            DatabaseReference ref = this.diniDatabase.child(diningId);
 
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        HashMap<String, String> destinationDetails = new HashMap<>();
+                        HashMap<String, String> diningDetails = new HashMap<>();
                         for (DataSnapshot detailSnapshot : dataSnapshot.getChildren()) {
                             String key = detailSnapshot.getKey();
                             String value = detailSnapshot.getValue(String.class);
                             if (key != null && value != null) {
-                                destinationDetails.put(key, value);
+                                diningDetails.put(key, value);
                             }
                         }
-                        // Add the destination details to the result
-                        result.put(destId, destinationDetails);
+                        // Add the dining details to the result
+                        result.put(diningId, diningDetails);
                     }
                     synchronized (pendingRequests) {
                         pendingRequests[0]--;

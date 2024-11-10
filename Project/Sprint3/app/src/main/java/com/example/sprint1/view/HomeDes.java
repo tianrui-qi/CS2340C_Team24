@@ -172,10 +172,6 @@ public class HomeDes extends AppCompatActivity {
                     // Add the card to the container
                     container.addView(cardView);
                 }
-            } else {
-                // Inflate the home_des_empty layout
-                View noDataCard = inflater.inflate(R.layout.home_des_empty, container, false);
-                container.addView(noDataCard);
             }
         });
     }
