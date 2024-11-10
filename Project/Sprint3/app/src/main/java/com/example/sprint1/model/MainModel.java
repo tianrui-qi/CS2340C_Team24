@@ -25,6 +25,7 @@ public class MainModel {
     private final UserDatabase userDatabase = new UserDatabase();
     private final DestDatabase destDatabase = new DestDatabase();
     private final DiniDatabase diniDatabase = new DiniDatabase();
+    private final AccoDatabase accoDatabase = new AccoDatabase();
 
     /* Main Functions */
 
@@ -127,6 +128,33 @@ public class MainModel {
                 callback.onResult(null);
             } else {
                 this.diniDatabase.getDining(keys, callback::onResult);
+            }
+        });
+    }
+
+    public void addAccommodation(
+            String checkIn, String checkOut, String location, String roomNum, String roomType,
+            Callback<Boolean> callback
+    ) {
+        this.accoDatabase.addAccommodation(
+                checkIn, checkOut, location, roomNum, roomType, key -> {
+                    if (key != null) {
+                        this.userDatabase.addAccommodation(key, callback::onResult);
+                    } else {
+                        callback.onResult(false);
+                    }
+                }
+        );
+    }
+
+    public void getAccommodation(
+            Callback<HashMap<String, HashMap<String, String>>> callback
+    ) {
+        this.userDatabase.getAccommodation(keys -> {
+            if (keys == null || keys.isEmpty()) {
+                callback.onResult(null);
+            } else {
+                this.accoDatabase.getAccommodation(keys, callback::onResult);
             }
         });
     }
