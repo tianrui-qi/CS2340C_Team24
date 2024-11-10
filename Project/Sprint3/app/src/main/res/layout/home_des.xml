@@ -25,11 +25,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="25dp"
                 android:gravity="center"
                 android:text="@string/Home_Des_Title"
                 android:textColor="@color/black"
-                android:textSize="50sp"
+                android:textSize="40sp"
 
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
             <!-- Log Travel Bottom -->
             <Button
                 android:id="@+id/HomeDestination_LogTravel"
-                android:layout_width="210dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="20dp"
@@ -125,7 +125,7 @@
             <!-- Calculate Vacation Time Bottom -->
             <Button
                 android:id="@+id/HomeDestination_Calculate"
-                android:layout_width="210dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="20dp"

@@ -164,8 +164,6 @@ public class HomeLog extends AppCompatActivity {
         findViewById(R.id.Home_Log_AddNote).setOnClickListener(v -> {
             // Create an EditText to input the note
             EditText noteInput = new EditText(HomeLog.this);
-            noteInput.setHint("Enter your note here");
-
             // Create an AlertDialog to input the note
             new AlertDialog.Builder(HomeLog.this)
                     .setTitle("Add Note")
@@ -177,17 +175,7 @@ public class HomeLog extends AppCompatActivity {
                             // Save the note using the MainViewModel
                             this.mainViewModel.addNote(note, success -> {
                                 if (success) {
-                                    Toast.makeText(
-                                            HomeLog.this, "Note added successfully!",
-                                            Toast.LENGTH_SHORT
-                                    ).show();
-                                    // Refresh the list to display the new note
                                     listCollaboratorsAndNotes();
-                                } else {
-                                    Toast.makeText(
-                                            HomeLog.this, "Failed to add note. Please try again.",
-                                            Toast.LENGTH_SHORT
-                                    ).show();
                                 }
                             });
                         } else {
@@ -206,45 +194,28 @@ public class HomeLog extends AppCompatActivity {
         findViewById(R.id.Home_Log_AddCollaborator).setOnClickListener(v -> {
             // Step 1: Get non-collaborators from MainViewModel
             this.mainViewModel.getNonCollaborator(nonCollaborators -> {
-                if (nonCollaborators != null && !nonCollaborators.isEmpty()) {
-                    // Step 2: Convert the list to an array for the dialog
-                    String[] usersArray = nonCollaborators.toArray(new String[0]);
-
-                    // Step 3: Display a dialog for selecting a user
-                    new AlertDialog.Builder(HomeLog.this)
-                            .setTitle("Select a User")
-                            .setItems(usersArray, (dialog, which) -> {
-                                String selectedUser = usersArray[which];
-
-                                // Step 4: Add the selected user as a collaborator
-                                this.mainViewModel.addCollaborator(selectedUser, success -> {
-                                    if (success) {
-                                        Toast.makeText(
-                                                HomeLog.this,
-                                                selectedUser + " added as collaborator!",
-                                                Toast.LENGTH_SHORT
-                                        ).show();
-
-                                        // Step 5: Refresh the list of collaborators and notes
-                                        this.listCollaboratorsAndNotes();
-                                    } else {
-                                        Toast.makeText(
-                                                HomeLog.this,
-                                                "Failed to add collaborator. Please try again.",
-                                                Toast.LENGTH_SHORT
-                                        ).show();
-                                    }
-                                });
-                            })
-                            .setNegativeButton("Cancel", null)
-                            .show();
-                } else {
-                    // No available non-collaborators
-                    Toast.makeText(
-                            HomeLog.this, "No available users to add as collaborators.",
-                            Toast.LENGTH_SHORT
-                    ).show();
+                if (nonCollaborators == null || nonCollaborators.isEmpty()) {
+                    return;
                 }
+
+                // Step 2: Convert the list to an array for the dialog
+                String[] usersArray = nonCollaborators.toArray(new String[0]);
+
+                // Step 3: Display a dialog for selecting a user
+                new AlertDialog.Builder(HomeLog.this)
+                        .setTitle("Add Collaborator")
+                        .setItems(usersArray, (dialog, which) -> {
+                            String selectedUser = usersArray[which];
+
+                            // Step 4: Add the selected user as a collaborator
+                            this.mainViewModel.addCollaborator(selectedUser, success -> {
+                                if (success) {
+                                    this.listCollaboratorsAndNotes();
+                                }
+                            });
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
             });
         });
     }

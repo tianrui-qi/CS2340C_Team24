@@ -21,32 +21,7 @@ public class MainViewModel extends ViewModel {
 
     private final MainModel mainModel = MainModel.getInstance();
 
-    /* Feature 1: User Account */
-
-    private static int calDuration(Date startDate, Date endDate) {
-        return (int) TimeUnit.MILLISECONDS.toDays(
-                endDate.getTime() - startDate.getTime()
-        ) + 1;
-    }
-
-    private static void addOccupiedDays(
-            Set<String> uniqueOccupiedDays, DateFormat dateFormat,
-            Date vacationStart, Date vacationEnd, Date destStart, Date destEnd
-    ) {
-        Date latestStart = vacationStart.after(destStart) ? vacationStart : destStart;
-        Date earliestEnd = vacationEnd.before(destEnd) ? vacationEnd : destEnd;
-        if (!latestStart.after(earliestEnd)) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(latestStart);
-            while (!calendar.getTime().after(earliestEnd)) {
-                String dateStr = dateFormat.format(calendar.getTime());
-                uniqueOccupiedDays.add(dateStr);
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-            }
-        }
-    }
-
-    /* Feature 2: Log Travel */
+    /* Main Features */
 
     public void userSignUp(
             String username, String password,
@@ -80,7 +55,31 @@ public class MainViewModel extends ViewModel {
         this.mainModel.userSignIn(username, password, callback::onResult);
     }
 
-    /* Feature 3: Calculate Vacation Time */
+    public void addNote(
+            String note,
+            Callback<Boolean> callback
+    ) {
+        this.mainModel.addNote(note, callback::onResult);
+    }
+
+    public void getNote(
+            Callback<HashMap<String, String>> callback
+    ) {
+        this.mainModel.getNote(callback::onResult);
+    }
+
+    public void addCollaborator(
+            String collaborator,
+            Callback<Boolean> callback
+    ) {
+        this.mainModel.addCollaborator(collaborator, callback::onResult);
+    }
+
+    public void getNonCollaborator(
+            Callback<ArrayList<String>> callback
+    ) {
+        this.mainModel.getNonCollaborator(callback::onResult);
+    }
 
     public void addDestination(
             String travelLocation, String startDate, String endDate,
@@ -189,8 +188,6 @@ public class MainViewModel extends ViewModel {
         }
     }
 
-    /* Feature 4: Collaboration */
-
     public void getVacation(
             Callback<HashMap<String, String>> callback
     ) {
@@ -245,32 +242,84 @@ public class MainViewModel extends ViewModel {
         }));
     }
 
-    public void addCollaborator(
-            String collaborator,
+    public void addDining(
+            String location, String website, String time,
             Callback<Boolean> callback
     ) {
-        this.mainModel.addCollaborator(collaborator, callback::onResult);
+        // Check input format
+        if (
+                location == null || location.trim().isEmpty()
+                        || website == null || website.trim().isEmpty()
+                        || time == null || !time.matches("^\\d{2}/\\d{2}/\\d{4}$")
+        ) {
+            callback.onResult(false);
+            return;
+        }
+
+        try {
+            // Check if time is valid
+            DateFormat dateFormat = DateFormat.getDateInstance(
+                    DateFormat.SHORT, java.util.Locale.US
+            );
+            dateFormat.setLenient(false);
+            Date reservationDate = dateFormat.parse(time);
+            if (reservationDate == null) {
+                callback.onResult(false);
+                return;
+            }
+        } catch (ParseException e) {
+            callback.onResult(false);
+            return;
+        }
+
+        // Check for duplicates using existing dining records
+        this.mainModel.getDining(existingDining -> {
+            if (existingDining != null) {
+                for (HashMap<String, String> dining : existingDining.values()) {
+                    if (location.equals(dining.get("location"))
+                            && website.equals(dining.get("website"))
+                            && time.equals(dining.get("time"))) {
+                        // Duplicate found
+                        callback.onResult(false);
+                        return;
+                    }
+                }
+            }
+
+            // If no duplicates, proceed to add the dining record
+            this.mainModel.addDining(location, website, time, callback::onResult);
+        });
     }
 
-    public void getNonCollaborator(
-            Callback<ArrayList<String>> callback
+    public void getDining(
+            Callback<HashMap<String, HashMap<String, String>>> callback
     ) {
-        this.mainModel.getNonCollaborator(callback::onResult);
+        this.mainModel.getDining(callback::onResult);
     }
 
     /* Helper Methods */
 
-    public void addNote(
-            String note,
-            Callback<Boolean> callback
-    ) {
-        this.mainModel.addNote(note, callback::onResult);
+    private static int calDuration(Date startDate, Date endDate) {
+        return (int) TimeUnit.MILLISECONDS.toDays(
+                endDate.getTime() - startDate.getTime()
+        ) + 1;
     }
 
-    public void getNote(
-            Callback<HashMap<String, String>> callback
+    private static void addOccupiedDays(
+            Set<String> uniqueOccupiedDays, DateFormat dateFormat,
+            Date vacationStart, Date vacationEnd, Date destStart, Date destEnd
     ) {
-        this.mainModel.getNote(callback::onResult);
+        Date latestStart = vacationStart.after(destStart) ? vacationStart : destStart;
+        Date earliestEnd = vacationEnd.before(destEnd) ? vacationEnd : destEnd;
+        if (!latestStart.after(earliestEnd)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(latestStart);
+            while (!calendar.getTime().after(earliestEnd)) {
+                String dateStr = dateFormat.format(calendar.getTime());
+                uniqueOccupiedDays.add(dateStr);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
+        }
     }
 
     /* Callbacks */

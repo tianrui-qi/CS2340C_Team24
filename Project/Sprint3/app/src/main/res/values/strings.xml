@@ -16,7 +16,7 @@
     <string name="Home_Log_AddCollaborator">Add Collaborator</string>
     <!--  home_des  -->
     <string name="Home_Des_Title">Destination</string>
-    <string name="Home_Des_LogTravel">Log Travel</string>
+    <string name="Home_Des_LogTravel">Add Destination</string>
     <string name="Home_Des_LogTravel_TravelLocation">Travel Location</string>
     <string name="Home_Des_LogTravel_StartDate">Estimated Start (MM/DD/YYYY)</string>
     <string name="Home_Des_LogTravel_EndDate">Estimated End (MM/DD/YYYY)</string>
@@ -32,7 +32,16 @@
     <string name="HomeDestination_Calculate_Back">Back</string>
     <string name="Home_Des_ListDes_Empty">No travel records found.</string>
     <!--  home_din  -->
-    <string name="Home_Din_Title">Dining Establishments</string>
+    <string name="Home_Din_Title">Dining</string>
+    <string name="Home_Din_ListDining_Location">Location: </string>
+    <string name="Home_Din_ListDining_Website">Website: </string>
+    <string name="Home_Din_ListDining_Time">Time: </string>
+    <string name="Home_Din_AddDining">Add Dining</string>
+    <string name="Home_Din_AddDining_Location">Location</string>
+    <string name="Home_Din_AddDining_Website">Website</string>
+    <string name="Home_Din_AddDining_Time">Time (MM/DD/YYYY)</string>
+    <string name="Home_Din_AddDining_Cancel">Cancel</string>
+    <string name="Home_Din_AddDining_Submit">Submit</string>
     <!--  home_acc  -->
     <string name="Home_Acc_Title">Accommodations</string>
     <!--  home_tra  -->
