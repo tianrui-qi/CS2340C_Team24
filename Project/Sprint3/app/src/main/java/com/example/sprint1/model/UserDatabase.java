@@ -13,18 +13,23 @@ import java.util.HashMap;
 
 public class UserDatabase {
 
+    /* Instance fields */
+
     private final DatabaseReference userDatabase;
     private String usernameCurr;
+
+    /* Constructors */
 
     public UserDatabase() {
         this.userDatabase = FirebaseDatabase.getInstance().getReference("user");
     }
 
-    public String getUsernameCurr() {
-        return this.usernameCurr;
-    }
+    /* Main Features */
 
-    public void userSignUp(String username, String password, MainModel.CallbackBool callback) {
+    public void userSignUp(
+            String username, String password,
+            Callback<Boolean> callback
+    ) {
         DatabaseReference refer = this.userDatabase.child(username);
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -47,7 +52,10 @@ public class UserDatabase {
         });
     }
 
-    public void userSignIn(String username, String password, MainModel.CallbackBool callback) {
+    public void userSignIn(
+            String username, String password,
+            Callback<Boolean> callback
+    ) {
         DatabaseReference refer = this.userDatabase.child(username);
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -69,7 +77,8 @@ public class UserDatabase {
     }
 
     public void setVacation(
-            String startDate, String endDate, String duration, MainModel.CallbackBool callback
+            String startDate, String endDate, String duration,
+            Callback<Boolean> callback
     ) {
         DatabaseReference refer = this.userDatabase.child(this.usernameCurr).child("vacation");
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -90,7 +99,9 @@ public class UserDatabase {
         });
     }
 
-    public void getVacation(MainModel.CallbackVacation callback) {
+    public void getVacation(
+            Callback<HashMap<String, String>> callback
+    ) {
         DatabaseReference refer = this.userDatabase.child(this.usernameCurr).child("vacation");
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -119,5 +130,17 @@ public class UserDatabase {
                 callback.onResult(null);
             }
         });
+    }
+
+    /* Getters and Setters */
+
+    public String getUsernameCurr() {
+        return this.usernameCurr;
+    }
+
+    /* Callbacks */
+
+    public interface Callback<T> {
+        void onResult(T callback);
     }
 }

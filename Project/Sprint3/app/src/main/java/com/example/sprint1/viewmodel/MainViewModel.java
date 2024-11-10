@@ -16,11 +16,16 @@ import java.util.concurrent.TimeUnit;
 
 public class MainViewModel extends ViewModel {
 
+    /* Instance fields */
+
     private final MainModel mainModel = MainModel.getInstance();
 
     /* Main Features */
 
-    public void userSignUp(String username, String password, CallbackBool callback) {
+    public void userSignUp(
+            String username, String password,
+            Callback<Boolean> callback
+    ) {
         // check input format
         if (
                 username == null || username.trim().isEmpty()
@@ -33,7 +38,10 @@ public class MainViewModel extends ViewModel {
         this.mainModel.userSignUp(username, password, callback::onResult);
     }
 
-    public void userSignIn(String username, String password, CallbackBool callback) {
+    public void userSignIn(
+            String username, String password,
+            Callback<Boolean> callback
+    ) {
         // check input format
         if (
                 username == null || username.trim().isEmpty()
@@ -47,7 +55,8 @@ public class MainViewModel extends ViewModel {
     }
 
     public void addDestination(
-            String travelLocation, String startDate, String endDate, CallbackBool callback
+            String travelLocation, String startDate, String endDate,
+            Callback<Boolean> callback
     ) {
         // check input format
         if (
@@ -84,12 +93,15 @@ public class MainViewModel extends ViewModel {
         );
     }
 
-    public void getDestinations(CallbackDestination callback) {
+    public void getDestinations(
+            Callback<HashMap<String, HashMap<String, String>>> callback
+    ) {
         this.mainModel.getDestinations(callback::onResult);
     }
 
     public void setVacation(
-            String startDate, String endDate, String duration, CallbackBool callback
+            String startDate, String endDate, String duration,
+            Callback<Boolean> callback
     ) {
         // check input format
         if (!startDate.isEmpty() && !startDate.matches("^\\d{2}/\\d{2}/\\d{4}$")) {
@@ -149,11 +161,15 @@ public class MainViewModel extends ViewModel {
         }
     }
 
-    public void getVacation(CallbackVacation callback) {
+    public void getVacation(
+            Callback<HashMap<String, String>> callback
+    ) {
         this.mainModel.getVacation(callback::onResult);
     }
 
-    public void calVacation(CallbackString callback) {
+    public void calVacation(
+            Callback<String> callback
+    ) {
         DateFormat dateFormat = DateFormat.getDateInstance(
                 DateFormat.SHORT, java.util.Locale.US
         );
@@ -199,7 +215,7 @@ public class MainViewModel extends ViewModel {
         }));
     }
 
-    /* Help Function */
+    /* Helper Methods */
 
     private int calDuration(Date startDate, Date endDate) {
         return (int) TimeUnit.MILLISECONDS.toDays(
@@ -226,19 +242,7 @@ public class MainViewModel extends ViewModel {
 
     /* Callbacks */
 
-    public interface CallbackBool {
-        void onResult(boolean callback);
-    }
-
-    public interface CallbackString {
-        void onResult(String callback);
-    }
-
-    public interface CallbackDestination {
-        void onResult(HashMap<String, HashMap<String, String>> callback);
-    }
-
-    public interface CallbackVacation {
-        void onResult(HashMap<String, String> callback);
+    public interface Callback<T> {
+        void onResult(T callback);
     }
 }

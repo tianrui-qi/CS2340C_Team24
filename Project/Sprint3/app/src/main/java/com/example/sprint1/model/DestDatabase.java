@@ -13,20 +13,22 @@ import java.util.HashMap;
 
 public class DestDatabase {
 
+    /* Instance fields */
+
     private final DatabaseReference destDatabase;
     private String usernameCurr;
+
+    /* Constructors */
 
     public DestDatabase() {
         this.destDatabase = FirebaseDatabase.getInstance().getReference("destination");
     }
 
-    public void setUsernameCurr(String username) {
-        this.usernameCurr = username;
-    }
+    /* Main Features */
 
     public void addDestination(
             String travelLocation, String startDate, String endDate, String duration,
-            MainModel.CallbackBool callback
+            Callback<Boolean> callback
     ) {
         DatabaseReference refer = this.destDatabase.child(this.usernameCurr).child(travelLocation);
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -52,7 +54,9 @@ public class DestDatabase {
         });
     }
 
-    public void getDestinations(MainModel.CallbackDestination callback) {
+    public void getDestinations(
+            Callback<HashMap<String, HashMap<String, String>>> callback
+    ) {
         DatabaseReference refer = this.destDatabase.child(this.usernameCurr);
         refer.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -80,5 +84,17 @@ public class DestDatabase {
                 callback.onResult(null);
             }
         });
+    }
+
+    /* Getters and Setters */
+
+    public void setUsernameCurr(String username) {
+        this.usernameCurr = username;
+    }
+
+    /* Callbacks */
+
+    public interface Callback<T> {
+        void onResult(T callback);
     }
 }
