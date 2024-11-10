@@ -6,6 +6,7 @@ import com.example.sprint1.model.MainModel;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +21,32 @@ public class MainViewModel extends ViewModel {
 
     private final MainModel mainModel = MainModel.getInstance();
 
-    /* Main Features */
+    /* Feature 1: User Account */
+
+    private static int calDuration(Date startDate, Date endDate) {
+        return (int) TimeUnit.MILLISECONDS.toDays(
+                endDate.getTime() - startDate.getTime()
+        ) + 1;
+    }
+
+    private static void addOccupiedDays(
+            Set<String> uniqueOccupiedDays, DateFormat dateFormat,
+            Date vacationStart, Date vacationEnd, Date destStart, Date destEnd
+    ) {
+        Date latestStart = vacationStart.after(destStart) ? vacationStart : destStart;
+        Date earliestEnd = vacationEnd.before(destEnd) ? vacationEnd : destEnd;
+        if (!latestStart.after(earliestEnd)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(latestStart);
+            while (!calendar.getTime().after(earliestEnd)) {
+                String dateStr = dateFormat.format(calendar.getTime());
+                uniqueOccupiedDays.add(dateStr);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
+        }
+    }
+
+    /* Feature 2: Log Travel */
 
     public void userSignUp(
             String username, String password,
@@ -54,6 +80,8 @@ public class MainViewModel extends ViewModel {
         this.mainModel.userSignIn(username, password, callback::onResult);
     }
 
+    /* Feature 3: Calculate Vacation Time */
+
     public void addDestination(
             String travelLocation, String startDate, String endDate,
             Callback<Boolean> callback
@@ -82,7 +110,7 @@ public class MainViewModel extends ViewModel {
                 return;
             }
             // calculate duration
-            duration = String.valueOf(this.calDuration(pStartDate, pEndDate));
+            duration = String.valueOf(MainViewModel.calDuration(pStartDate, pEndDate));
         } catch (ParseException e) {
             callback.onResult(false);
             return;
@@ -93,10 +121,10 @@ public class MainViewModel extends ViewModel {
         );
     }
 
-    public void getDestinations(
+    public void getDestination(
             Callback<HashMap<String, HashMap<String, String>>> callback
     ) {
-        this.mainModel.getDestinations(callback::onResult);
+        this.mainModel.getDestination(callback::onResult);
     }
 
     public void setVacation(
@@ -125,14 +153,14 @@ public class MainViewModel extends ViewModel {
 
             if (pStartDate != null && pEndDate != null && pDuration != null) {
                 // case 1: all three values are present
-                if (calDuration(pStartDate, pEndDate) == pDuration) {
+                if (MainViewModel.calDuration(pStartDate, pEndDate) == pDuration) {
                     this.mainModel.setVacation(startDate, endDate, duration, callback::onResult);
                 } else {
                     callback.onResult(false);
                 }
             } else if (pStartDate != null && pEndDate != null) {
                 // case 4: missing duration, calculate it
-                pDuration = calDuration(pStartDate, pEndDate);
+                pDuration = MainViewModel.calDuration(pStartDate, pEndDate);
                 if (pDuration > 0) {
                     this.mainModel.setVacation(
                             startDate, endDate, String.valueOf(pDuration), callback::onResult
@@ -161,6 +189,8 @@ public class MainViewModel extends ViewModel {
         }
     }
 
+    /* Feature 4: Collaboration */
+
     public void getVacation(
             Callback<HashMap<String, String>> callback
     ) {
@@ -177,7 +207,7 @@ public class MainViewModel extends ViewModel {
 
         Set<String> uniqueOccupiedDays = new HashSet<>();
 
-        mainModel.getVacation(vacationData -> mainModel.getDestinations(destinations -> {
+        this.mainModel.getVacation(vacationData -> this.mainModel.getDestination(destinations -> {
             if (destinations == null || destinations.isEmpty()) {
                 callback.onResult("0"); // 没有目的地数据，返回 0
                 return;
@@ -201,7 +231,7 @@ public class MainViewModel extends ViewModel {
                         return;
                     }
 
-                    addOccupiedDays(
+                    MainViewModel.addOccupiedDays(
                             uniqueOccupiedDays, dateFormat,
                             pVacationStart, pVacationEnd,
                             dateFormat.parse(destStart), dateFormat.parse(destEnd)
@@ -215,29 +245,32 @@ public class MainViewModel extends ViewModel {
         }));
     }
 
-    /* Helper Methods */
-
-    private int calDuration(Date startDate, Date endDate) {
-        return (int) TimeUnit.MILLISECONDS.toDays(
-                endDate.getTime() - startDate.getTime()
-        ) + 1;
+    public void addCollaborator(
+            String collaborator,
+            Callback<Boolean> callback
+    ) {
+        this.mainModel.addCollaborator(collaborator, callback::onResult);
     }
 
-    private void addOccupiedDays(
-            Set<String> uniqueOccupiedDays, DateFormat dateFormat,
-            Date vacationStart, Date vacationEnd, Date destStart, Date destEnd
+    public void getNonCollaborator(
+            Callback<ArrayList<String>> callback
     ) {
-        Date latestStart = vacationStart.after(destStart) ? vacationStart : destStart;
-        Date earliestEnd = vacationEnd.before(destEnd) ? vacationEnd : destEnd;
-        if (!latestStart.after(earliestEnd)) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(latestStart);
-            while (!calendar.getTime().after(earliestEnd)) {
-                String dateStr = dateFormat.format(calendar.getTime());
-                uniqueOccupiedDays.add(dateStr);
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-            }
-        }
+        this.mainModel.getNonCollaborator(callback::onResult);
+    }
+
+    /* Helper Methods */
+
+    public void addNote(
+            String note,
+            Callback<Boolean> callback
+    ) {
+        this.mainModel.addNote(note, callback::onResult);
+    }
+
+    public void getNote(
+            Callback<HashMap<String, String>> callback
+    ) {
+        this.mainModel.getNote(callback::onResult);
     }
 
     /* Callbacks */

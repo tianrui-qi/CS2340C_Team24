@@ -149,14 +149,15 @@ public class HomeDes extends AppCompatActivity {
         LinearLayout container = findViewById(R.id.log_travel_records_container);
         container.removeAllViews(); // Clear any previous views
 
-        mainViewModel.getDestinations(destinations -> {
+        mainViewModel.getDestination(destinations -> {
             LayoutInflater inflater = LayoutInflater.from(this);
 
             if (destinations != null && !destinations.isEmpty()) {
                 // Loop through each destination and create a card for each
-                for (String location : destinations.keySet()) {
-                    HashMap<String, String> details = destinations.get(location);
-                    String duration = (details != null) ? details.get("duration") : null;
+                for (String destination : destinations.keySet()) {
+                    HashMap<String, String> detail = destinations.get(destination);
+                    String duration = (detail != null) ? detail.get("duration") : null;
+                    String travelLocation = (detail != null) ? detail.get("travelLocation") : null;
 
                     // Inflate the home_des_card layout
                     View cardView = inflater.inflate(R.layout.home_des_card, container, false);
@@ -165,7 +166,7 @@ public class HomeDes extends AppCompatActivity {
                     TextView locationText = cardView.findViewById(R.id.location_text);
                     TextView durationText = cardView.findViewById(R.id.duration_text);
 
-                    locationText.setText(location);
+                    locationText.setText(travelLocation);
                     durationText.setText(String.format("%s days", duration));
 
                     // Add the card to the container

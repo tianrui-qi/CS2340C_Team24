@@ -64,13 +64,13 @@ public class ExampleInstrumentedTest {
     @Test
     public void testGetDestinationsWithExistingDestinations() {
         mainViewModel.userSignIn("testUser", "testPassword", Assert::assertTrue);
-        mainViewModel.getDestinations(result -> assertTrue(result.containsKey("Paris")));
+        mainViewModel.getDestination(result -> assertTrue(result.containsKey("Paris")));
     }
 
     @Test
     public void testGetDestinationsWithNoDestinations() {
         mainViewModel.userSignIn("testUser", "testPassword", Assert::assertTrue);
-        mainViewModel.getDestinations(Assert::assertNull);
+        mainViewModel.getDestination(Assert::assertNull);
     }
 
     @Test
@@ -118,7 +118,7 @@ public class ExampleInstrumentedTest {
     @Test
     public void testLogTravelEntryStoredInDatabase() {
         mainViewModel.userSignIn("testUser", "testPassword", Assert::assertTrue);
-        mainViewModel.getDestinations(result -> {
+        mainViewModel.getDestination(result -> {
             assertNotNull(result);
             assertTrue(result.containsKey("TestLocation"));
         });

@@ -4,7 +4,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sprint1.R;
@@ -19,6 +24,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -32,6 +38,9 @@ public class HomeLog extends AppCompatActivity {
         setContentView(R.layout.home_log);
 
         this.buttonVisualization();
+        this.listCollaboratorsAndNotes();
+        this.buttonAddNote();
+        this.buttonAddCollaborator();
         this.buttonNavigationBar();
     }
 
@@ -121,6 +130,123 @@ public class HomeLog extends AppCompatActivity {
         PieChart pieChart = findViewById(R.id.pie_chart);
         pieChart.setData(pieData);
         pieChart.invalidate(); // Refresh the chart
+    }
+
+    private void listCollaboratorsAndNotes() {
+        LinearLayout container = findViewById(R.id.collaborators_container);
+        container.removeAllViews(); // Clear existing views
+
+        mainViewModel.getNote(notes -> {
+            for (Map.Entry<String, String> entry : notes.entrySet()) {
+                String collaboratorName = entry.getKey();
+                String note = entry.getValue();
+
+                // Inflate the card layout dynamically
+                View cardView = getLayoutInflater().inflate(
+                        R.layout.home_log_card, container, false
+                );
+
+                // Set collaborator name and note
+                TextView nameText = cardView.findViewById(R.id.collaborator_name_text);
+                TextView noteText = cardView.findViewById(R.id.collaborator_note_text);
+
+                nameText.setText(collaboratorName);
+                noteText.setText(note);
+
+                // Add the card to the container
+                container.addView(cardView);
+            }
+        });
+    }
+
+    private void buttonAddNote() {
+        // Find the "Add Note" button by its ID
+        findViewById(R.id.Home_Log_AddNote).setOnClickListener(v -> {
+            // Create an EditText to input the note
+            EditText noteInput = new EditText(HomeLog.this);
+            noteInput.setHint("Enter your note here");
+
+            // Create an AlertDialog to input the note
+            new AlertDialog.Builder(HomeLog.this)
+                    .setTitle("Add Note")
+                    .setView(noteInput)
+                    .setPositiveButton("Save", (dialog, which) -> {
+                        // Get the note text from the input field
+                        String note = noteInput.getText().toString().trim();
+                        if (!note.isEmpty()) {
+                            // Save the note using the MainViewModel
+                            this.mainViewModel.addNote(note, success -> {
+                                if (success) {
+                                    Toast.makeText(
+                                            HomeLog.this, "Note added successfully!",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+                                    // Refresh the list to display the new note
+                                    listCollaboratorsAndNotes();
+                                } else {
+                                    Toast.makeText(
+                                            HomeLog.this, "Failed to add note. Please try again.",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+                                }
+                            });
+                        } else {
+                            Toast.makeText(
+                                    HomeLog.this, "Note cannot be empty.",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+                    })
+                    .setNegativeButton("Cancel", null) // Dismiss the dialog on "Cancel"
+                    .show();
+        });
+    }
+
+    private void buttonAddCollaborator() {
+        findViewById(R.id.Home_Log_AddCollaborator).setOnClickListener(v -> {
+            // Step 1: Get non-collaborators from MainViewModel
+            this.mainViewModel.getNonCollaborator(nonCollaborators -> {
+                if (nonCollaborators != null && !nonCollaborators.isEmpty()) {
+                    // Step 2: Convert the list to an array for the dialog
+                    String[] usersArray = nonCollaborators.toArray(new String[0]);
+
+                    // Step 3: Display a dialog for selecting a user
+                    new AlertDialog.Builder(HomeLog.this)
+                            .setTitle("Select a User")
+                            .setItems(usersArray, (dialog, which) -> {
+                                String selectedUser = usersArray[which];
+
+                                // Step 4: Add the selected user as a collaborator
+                                this.mainViewModel.addCollaborator(selectedUser, success -> {
+                                    if (success) {
+                                        Toast.makeText(
+                                                HomeLog.this,
+                                                selectedUser + " added as collaborator!",
+                                                Toast.LENGTH_SHORT
+                                        ).show();
+
+                                        // Step 5: Refresh the list of collaborators and notes
+                                        this.listCollaboratorsAndNotes();
+                                    } else {
+                                        Toast.makeText(
+                                                HomeLog.this,
+                                                "Failed to add collaborator. Please try again.",
+                                                Toast.LENGTH_SHORT
+                                        ).show();
+                                    }
+                                });
+                            })
+                            .setNegativeButton("Cancel", null)
+                            .show();
+                } else {
+                    // No available non-collaborators
+                    Toast.makeText(
+                            HomeLog.this, "No available users to add as collaborators.",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            });
+        });
     }
 
     private void buttonNavigationBar() {
