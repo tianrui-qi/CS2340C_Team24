@@ -16,5 +16,5 @@ public class HighPriorityTask extends Task{
 
     public boolean getifHighP() {
         return ifHighP;
-    }
+    } 
 }
