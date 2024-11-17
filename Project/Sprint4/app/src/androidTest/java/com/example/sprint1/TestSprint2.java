@@ -16,10 +16,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class TestSprint2 {
     private static final MainViewModel mainViewModel = new MainViewModel();
 
     @Test
