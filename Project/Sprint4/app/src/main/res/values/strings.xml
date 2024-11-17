@@ -59,7 +59,22 @@
     <string name="Home_Acc_AddAccommodation_Submit">Submit</string>
     <!--  home_tra  -->
     <string name="Home_Tra_Title">Travel Community</string>
-
+    <string name="Home_Tra_AddPost">Add Travel Post</string>
+    <string name="Home_Tra_ListPost_Username">Username: %s</string>
+    <string name="Home_Tra_ListPost_Start">Start: %s</string>
+    <string name="Home_Tra_ListPost_End">End: %s</string>
+    <string name="Home_Tra_ListPost_Destination">Destination: %s</string>
+    <string name="Home_Tra_ListPost_Accommodation">Accommodation: %s</string>
+    <string name="Home_Tra_ListPost_Dining">Dining: %s</string>
+    <string name="Home_Tra_ListPost_Note">Note: %s</string>
+    <string name="Home_Tra_AddTravel_Start">Start Date (MM/DD/YYYY)</string>
+    <string name="Home_Tra_AddTravel_End">End Date (MM/DD/YYYY)</string>
+    <string name="Home_Tra_AddTravel_Destination">Destination</string>
+    <string name="Home_Tra_AddTravel_Accommodation">Accommodation</string>
+    <string name="Home_Tra_AddTravel_Dining">Dining</string>
+    <string name="Home_Tra_AddTravel_Note">Note</string>
+    <string name="Home_Tra_AddTravel_Cancel">Cancel</string>
+    <string name="Home_Tra_AddTravel_Submit">Submit</string>
 
     <string name="User_SignIn_Title">Log In</string>
     <string name="create_login">Log In</string>

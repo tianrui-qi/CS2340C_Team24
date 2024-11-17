@@ -664,6 +664,57 @@ public class UserDatabase {
         });
     }
 
+    public void addTravel(
+            String key,
+            Callback<Boolean> callback
+    ) {
+        // Reference to the current user's travel list in the database
+        DatabaseReference ref = this.userDatabase.child(this.usernameCurr).child("travel");
+
+        // Retrieve the existing travel list
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> travelKeys = new ArrayList<>();
+
+                // If travel data exists, populate the list
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        String travelKey = child.getValue(String.class);
+                        if (travelKey != null) {
+                            travelKeys.add(travelKey);
+                        }
+                    }
+                }
+
+                // Add the new key if it's not already in the list
+                if (!travelKeys.contains(key)) {
+                    travelKeys.add(key);
+                }
+
+                // Update the travel list in Firebase
+                ref.setValue(travelKeys).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onResult(true); // Success
+                    } else {
+                        callback.onResult(false); // Failure
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onResult(false);
+            }
+        });
+    }
+
+    /* Getter */
+
+    public String getUsernameCurr() {
+        return usernameCurr;
+    }
+
     /* Callbacks */
 
     public interface Callback<T> {

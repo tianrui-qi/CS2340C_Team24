@@ -2,6 +2,7 @@ package com.example.sprint1.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainModel {
 
@@ -11,6 +12,7 @@ public class MainModel {
     private final DestDatabase destDatabase = new DestDatabase();
     private final DiniDatabase diniDatabase = new DiniDatabase();
     private final AccoDatabase accoDatabase = new AccoDatabase();
+    private final TravDatabase travDatabase = new TravDatabase();
 
     /* Singleton Design */
 
@@ -192,6 +194,57 @@ public class MainModel {
                     callback.onResult(data);
                 });
             }
+        });
+    }
+
+    public void addTravel(
+            String start, String end,
+            String destination, String accommodation, String dining, String note,
+            Callback<Boolean> callback
+    ) {
+        // Retrieve the current username
+        String username = this.userDatabase.getUsernameCurr();
+        if (username == null || username.isEmpty()) {
+            callback.onResult(false); // Fail if the current username is not set
+            return;
+        }
+
+        Map<String, String> travelData = new HashMap<>();
+        travelData.put("username", username);
+        travelData.put("start", start);
+        travelData.put("end", end);
+        travelData.put("destination", destination);
+        travelData.put("accommodation", accommodation);
+        travelData.put("dining", dining);
+        travelData.put("note", note);
+
+        // Add the travel post to the TravelDatabase
+        this.travDatabase.addTravel(
+                travelData, key -> {
+                    if (key != null) {
+                        // Add the travel key to the current user's travel list
+                        this.userDatabase.addTravel(key, success -> {
+                            if (success) {
+                                notifyObservers("TravelAdded", key);
+                            }
+                            callback.onResult(success);
+                        });
+                    } else {
+                        callback.onResult(false); // Return failure if the key is null
+                    }
+                }
+        );
+    }
+
+    public void getTravel(
+            Callback<HashMap<String, HashMap<String, String>>> callback
+    ) {
+        // Fetch all travel posts from the TravelDatabase
+        this.travDatabase.getTravel(data -> {
+            if (data != null) {
+                notifyObservers("TravelFetched", data);
+            }
+            callback.onResult(data); // Return the fetched data
         });
     }
 

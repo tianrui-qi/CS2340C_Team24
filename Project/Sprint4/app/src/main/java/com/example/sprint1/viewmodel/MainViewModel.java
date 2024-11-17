@@ -398,6 +398,61 @@ public class MainViewModel extends ViewModel implements Observer {
         this.mainModel.getAccommodation(callback::onResult);
     }
 
+    public void addTravel(
+            String start, String end,
+            String destination, String accommodation, String dining, String note,
+            Callback<Boolean> callback
+    ) {
+        // Validate inputs
+        if (
+                start == null || start.trim().isEmpty()
+                        || end == null || end.trim().isEmpty()
+                        || destination == null || destination.trim().isEmpty()
+                        || accommodation == null || accommodation.trim().isEmpty()
+                        || dining == null || dining.trim().isEmpty()
+                        || note == null || note.trim().isEmpty()
+        ) {
+            callback.onResult(false);
+            return;
+        }
+
+        try {
+            // Check if start and end times are valid
+            DateFormat dateFormat = DateFormat.getDateInstance(
+                    DateFormat.SHORT, java.util.Locale.US
+            );
+            dateFormat.setLenient(false);
+            Date startDate = dateFormat.parse(start);
+            Date endDate = dateFormat.parse(end);
+
+            if (startDate == null || endDate == null || !endDate.after(startDate)) {
+                callback.onResult(false); // Invalid date range
+                return;
+            }
+
+            // Calculate the trip duration
+            int durationInDays = MainViewModel.calDuration(startDate, endDate);
+            if (durationInDays < 1) {
+                callback.onResult(false); // Duration must be at least 1 day
+                return;
+            }
+        } catch (ParseException e) {
+            callback.onResult(false); // Invalid date format
+            return;
+        }
+
+        // Add the travel data
+        this.mainModel.addTravel(
+                start, end, destination, accommodation, dining, note, callback::onResult
+        );
+    }
+
+    public void getTravel(
+            Callback<HashMap<String, HashMap<String, String>>> callback
+    ) {
+        this.mainModel.getTravel(callback::onResult);
+    }
+
     /* Helper Methods */
 
     private static int calDuration(Date startDate, Date endDate) {
