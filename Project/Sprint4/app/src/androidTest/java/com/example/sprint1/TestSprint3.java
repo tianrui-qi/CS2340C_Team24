@@ -21,7 +21,7 @@ import java.util.concurrent.CountDownLatch;
 
 
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTestSprint3 {
+public class TestSprint3 {
     private static final MainViewModel mainViewModel = new MainViewModel();
 
     @Test
