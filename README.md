@@ -1,4 +1,4 @@
-# CS2340C_Team24
+# CS2340C_Team24 
 
 ## Member
 
