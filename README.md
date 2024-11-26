@@ -191,3 +191,26 @@ After the interaction with the database finishes, the app will refresh the desti
 ![](assets/figure-5.jpg)
 
 ## Calculate Vacation Time
+
+In the Destination screen, user can calculate the vacation time by entering two of the three fields: start date, end date, and duration.
+After clicking the `Calculate` button, the app will calculate the third field and store these fields under [UserDatabase](app/src/main/java/com/example/sprint1/model/UserDatabase.java) since we will use this information later. 
+Next, the app will calculate days that are planned, i.e., added as a destination, during this period of vacation time and display the result.
+
+```json
+{
+  "user": {
+    "tianrui": {
+      "vacation": {
+        "duration": "30",
+        "endDate": "11/30/2024",
+        "startDate": "11/01/2024"
+      }
+    }
+  }
+}
+```
+
+In the Logistics page, there is a visualization button that will display the allotted vs planned trip days in a pie chart.
+This is also why we store the vacation time previously since we need to calculate the days that are planned during this period again when displaying the pie chart.
+
+![](assets/figure-6.jpg)
