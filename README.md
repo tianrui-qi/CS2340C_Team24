@@ -214,3 +214,68 @@ In the Logistics page, there is a visualization button that will display the all
 This is also why we store the vacation time previously since we need to calculate the days that are planned during this period again when displaying the pie chart.
 
 ![](assets/figure-6.jpg)
+
+## Collaboration
+
+User can collaborate with other users by clicking the Àdd Collaborator` button in the Logistics page.
+After add a collaborator, the app will store the collaborator's username in the user's collaborator list in [UserDatabase](app/src/main/java/com/example/sprint1/model/UserDatabase.java).
+The destination list, accommodation list, and dining list will be synchronized among all collaborators.
+The app will display list of collaborators in the Logistics page. 
+Each user can also add note, stored under [UserDatabase](app/src/main/java/com/example/sprint1/model/UserDatabase.java), that can be seen by all collaborators.
+
+```json
+{
+  "user": {
+    "tianrui": {
+      "accommodation": [
+        "-OCd55NK_O4EU_VdJR6_",
+        "-OCd5BdyNzdt_ggxQmqo"
+      ],
+      "collaborator": [
+        "yuxuan"
+      ],
+      "destination": [
+        "-OCdCmreVTltnX7fVXFT",
+        "-OCdCquI8Fmi_gefxn4S"
+      ],
+      "dining": [
+        "-OCd0Lh6Clt2BCKIf2mM",
+        "-OCd0nH7yeCiFlE2dUoK"
+      ],
+      "note": "This is a note",
+      "password": "123",
+      "travel": [
+        "-OCd7jyda-tQciqfa-xG",
+        "-OCd7vJzj8SjCWF5TWMV"
+      ],
+      "username": "tianrui",
+      "vacation": {
+        "duration": "30",
+        "endDate": "11/30/2024",
+        "startDate": "11/01/2024"
+      }
+    },
+    "yuxuan": {
+      "accommodation": [
+        "-OCd55NK_O4EU_VdJR6_",
+        "-OCd5BdyNzdt_ggxQmqo"
+      ],
+      "collaborator": [
+        "tianrui"
+      ],
+      "destination": [
+        "-OCdCmreVTltnX7fVXFT",
+        "-OCdCquI8Fmi_gefxn4S"
+      ],
+      "dining": [
+        "-OCd0Lh6Clt2BCKIf2mM",
+        "-OCd0nH7yeCiFlE2dUoK"
+      ],
+      "password": "123",
+      "username": "yuxuan"
+    }
+  }
+}
+```
+
+![](assets/figure-7.jpg)
