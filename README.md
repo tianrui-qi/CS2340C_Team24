@@ -38,7 +38,7 @@ For sign in, the app will check if [UserDatabase](app/src/main/java/com/example/
 
 ## Add Dining
 
-In the Dining page, users can add a new dining place by clicking the `Add Dining` button and entering the location, website, and date.
+In the Dining page, users can add a new dining place by clicking the `Add Dining` button and entering required fields.
 After users click the `Submit` button, in [DiniDatabase](app/src/main/java/com/example/sprint1/model/DiniDatabase.java), the app will randomly generate a key for this dining place and store each field as a value.
 Then, the app will add this dining key generated to the user's dining list in [UserDatabase](app/src/main/java/com/example/sprint1/model/UserDatabase.java).
 After the interaction with the database finishes, the app will refresh the dining page and list all the dining places stored under the user's dining list.
@@ -73,7 +73,7 @@ The app marks the date that is later than today as green where others as red and
 
 ## Add Accommodation
 
-In the Accommodation page, user can add a new accommodation by clicking the `Add Accommodation` button and entering location, room number, room type, check in date, and check out date.
+In the Accommodation page, user can add a new accommodation by clicking the `Add Accommodation` button and entering required fields.
 After clicking the `Submit` button, the app will generate a key for this accommodation and store each field as a value in [AccoDatabase](app/src/main/java/com/example/sprint1/model/AccoDatabase.java).
 Then, the app will add this accommodation key generated to the user's accommodation list in [UserDatabase](app/src/main/java/com/example/sprint1/model/UserDatabase.java).
 After the interaction with the database finishes, the app will refresh the accommodation page and list all the accommodations stored under the user's accommodation list.
@@ -109,3 +109,47 @@ The app marks the date that is later than today as green where others as red and
 ```
 
 ![](assets/figure-3.jpg)
+
+## Add Travel Post
+
+In the Travel Community page, users can add a new travel post by clicking the `Add Travel Post` button and entering required fields.
+After clicking the `Submit` button, the app will generate a key for this travel post and store each field as a value in [TravDatabase](app/src/main/java/com/example/sprint1/model/TravDatabase.java).
+Differ from the previous two features, the app will also store the username as a value of the travel post since we want to know who created this travel post.
+Then, the app will add this travel post key generated to the user's travel post list in [UserDatabase](app/src/main/java/com/example/sprint1/model/UserDatabase.java).
+After interaction with the database finishes, the app will refresh the travel page and list all the travel posts stored under the [TravDatabase](app/src/main/java/com/example/sprint1/model/TravDatabase.java).
+This is also why we have to store username as a value of each post since this page will display all the post instead of the travel post list of the current user.
+
+```json
+{
+  "travel": {
+    "-OCd7jyda-tQciqfa-xG": {
+      "accommodation": "QQQQ is bad.",
+      "destination": "Atlanta",
+      "dining": "McDonald's is good.",
+      "end": "11/29/2024",
+      "note": "All the best.",
+      "start": "11/24/2024",
+      "username": "tianrui"
+    },
+    "-OCd7vJzj8SjCWF5TWMV": {
+      "accommodation": "QQQQ is bad.",
+      "destination": "New York",
+      "dining": "Taco Bell is good.",
+      "end": "11/30/2024",
+      "note": "All the worst.",
+      "start": "11/25/2024",
+      "username": "tianrui"
+    }
+  },
+  "user": {
+    "tianrui": {
+      "travel": [
+        "-OCd7jyda-tQciqfa-xG",
+        "-OCd7vJzj8SjCWF5TWMV"
+      ]
+    }
+  }
+}
+```
+
+![](assets/figure-4.jpg)
