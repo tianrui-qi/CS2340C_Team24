@@ -153,3 +153,41 @@ This is also why we have to store username as a value of each post since this pa
 ```
 
 ![](assets/figure-4.jpg)
+
+## Add Destination
+
+In the Destination page, users can add a new destination by clicking the `Add Destination` button and entering required fields.
+After clicking the `Submit` button, the app will generate a key for this destination and store each field as a value in [DestDatabase](app/src/main/java/com/example/sprint1/model/DestDatabase.java).
+Then, the app will add this destination key generated to the user's destination list in [UserDatabase](app/src/main/java/com/example/sprint1/model/UserDatabase.java).
+After the interaction with the database finishes, the app will refresh the destination page and list all the destinations stored under the user's destination list.
+
+```json
+{
+  "destination": {
+    "-OCdCmreVTltnX7fVXFT": {
+      "duration": "6",
+      "endDate": "11/10/2024",
+      "startDate": "11/05/2024",
+      "travelLocation": "New York"
+    },
+    "-OCdCquI8Fmi_gefxn4S": {
+      "duration": "11",
+      "endDate": "11/08/2024",
+      "startDate": "10/29/2024",
+      "travelLocation": "Atlanta"
+    }
+  },
+  "user": {
+    "tianrui": {
+      "destination": [
+        "-OCdCmreVTltnX7fVXFT",
+        "-OCdCquI8Fmi_gefxn4S"
+      ]
+    }
+  }
+}
+```
+
+![](assets/figure-5.jpg)
+
+## Calculate Vacation Time
